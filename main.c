@@ -1,18 +1,13 @@
-#include <stdio.h>
 #include <stdlib.h>
 
-#include "analizadorSintactico.h"
+#include "nicalc.h"
 #include "taboaSimbolos.h"
 
 
 int main() {
     iniciarTS();
-    imprimirTS();
-
-    analizadorSintactico();
-
-    imprimirTS();
+    nicalc();
     finalizarTS();
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }

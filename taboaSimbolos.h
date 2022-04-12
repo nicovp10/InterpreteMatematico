@@ -11,6 +11,9 @@ void iniciarTS();
 //  Se este compoñente léxico non está na táboa, insértao
 void buscar_insertar(CompLexico *comp);
 
+// Función que elimina un compoñente léxico concreto da táboa de símbolos
+void eliminar(CompLexico compLexico);
+
 // Función que finaliza a táboa de símbolos
 void finalizarTS();
 

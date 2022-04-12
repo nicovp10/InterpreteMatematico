@@ -14,10 +14,10 @@ OUTPUT = nicalc
 FLEX_FILE = flex.l
 
 # Ficheiros .h
-LIB_HEADERS = definicions.h lex.yy.h analizadorSintactico.h taboaSimbolos.h avl.h xestionErros.h
+LIB_HEADERS = definicions.h lex.yy.h nicalc.h taboaSimbolos.h avl.h xestionErros.h
 
 # Ficheiros .c
-SRCS = main.c lex.yy.c analizadorSintactico.c taboaSimbolos.c avl.c xestionErros.c
+SRCS = main.c lex.yy.c nicalc.c taboaSimbolos.c avl.c xestionErros.c
 
 # Ficheros .o: todos os .o cun análogo .c en SRCS
 OBJS = $(SRCS:.c=.o)

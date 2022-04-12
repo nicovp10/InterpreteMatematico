@@ -11,7 +11,7 @@
  *
  * Para a reestruturación da AVL usouse un factor de equilibrio (FE) en cada nodo, que será o valor resultante da operación:
  * altura(subarbore_dereita) - altura(subarbore_esquerda). Desta maneira saberase cando é necesario reestruturar a árbore.
- * Para a reestruturación xógase co desapilamento das chamadas recursivas á función insertar(), propagando o reaxuste dos
+ * Para a reestruturación xógase co desapilamento das chamadas recursivas á función insertar_nodo(), propagando o reaxuste dos
  * FE correspondentes cara arriba ata acadar un equilibrio. Tamén se empregou un punteiro ao pai de cada nodo para realizar as rotacións.
  */
 
@@ -288,7 +288,7 @@ void _reestruturar(avl *A) {
 
 
 // Función que inserta un novo nodo na árbore (presuponse que non existe un nodo coa misma clave nesta)
-void insertar(avl *A, tipoelem E) {
+void insertar_nodo(avl *A, tipoelem E) {
     if (vacia(*A)) {
         *A = malloc(sizeof(struct celda));
         (*A)->info.comp_lexico = E.comp_lexico;
@@ -303,12 +303,12 @@ void insertar(avl *A, tipoelem E) {
         return;
     }
 
-    // Aprovéitase o apilamento de chamadas a insertar() de forma recursiva para especificar o FE e o pai de cada nodo
+    // Aprovéitase o apilamento de chamadas a insertar_nodo() de forma recursiva para especificar o FE e o pai de cada nodo
 
     tipoclave cl = _clave_elem(&E);
     int comp = _comparar_clave_elem(cl, (*A)->info);
     if (comp > 0) {
-        insertar(&(*A)->der, E);
+        insertar_nodo(&(*A)->der, E);
         // Se non ten pai asignado (o caso dun nodo insertado na chamada á función anterior), engádeselle o nodo desta chamada á función
         if ((*A)->der->pai == NULL) {
             (*A)->der->pai = *A;
@@ -326,7 +326,7 @@ void insertar(avl *A, tipoelem E) {
             equilibrar = 0;
         }
     } else {
-        insertar(&(*A)->izq, E);
+        insertar_nodo(&(*A)->izq, E);
         // Se non ten pai asignado (o caso dun nodo insertado na chamada á función anterior), engádeselle o nodo desta chamada á función
         if ((*A)->izq->pai == NULL) {
             (*A)->izq->pai = *A;
@@ -344,5 +344,9 @@ void insertar(avl *A, tipoelem E) {
             equilibrar = 0;
         }
     }
+}
+
+// Función que elimina un nodo da árbore
+void eliminar_nodo(avl *A, tipoelem E) {
 
 }
