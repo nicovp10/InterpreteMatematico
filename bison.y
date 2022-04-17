@@ -4,7 +4,7 @@
 %}
 
 
-%token NUM
+%token NUM VAR FUNC
 %left '-' '+'
 %left '*' '/'
 %left NEG
@@ -18,7 +18,9 @@ entrada:
 ;
 
 line:   '\n'
+        | ';'
         | exp '\n'
+        | exp ';'
 ;
 
 exp:    NUM

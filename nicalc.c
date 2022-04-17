@@ -7,5 +7,5 @@
 
 // Función que invoca ao intérprete de expresións de cálculo matemático
 void nicalc() {
-
+    yyparse();
 }
