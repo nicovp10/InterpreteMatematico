@@ -3,6 +3,7 @@
 
 #include "taboaSimbolos.h"
 #include "avl.h"
+#include "system.h"
 
 
 avl TS;
@@ -14,20 +15,35 @@ void _auxImprimir(avl A) {
     if (!vacia(A)) {
         _auxImprimir(izq(A));
         ler(A, &E);
-        printf("\t< %d, %s >\n", E.comp_lexico, E.lexema);
+        if (E.comp_lexico == NUM || E.comp_lexico == VAR) {
+            printf("\t< %d, %s\tValor = %lf >\n", E.comp_lexico, E.lexema, E.valor.var);
+        } else if (E.comp_lexico == FUNC){
+            printf("\t< %d, %s\tFunción>\n", E.comp_lexico, E.lexema);
+        } else {
+            printf("\t< %d, %s\tComando do sistema>\n", E.comp_lexico, E.lexema);
+        }
         _auxImprimir(der(A));
     }
 }
 
 // Función que inicia a táboa de símbolos
 void iniciarTS() {
-    tipoelem keywords[] = {
-            {VAR,         "var"}
+    tipoelem inicializacion[] = {
+            {NUM,                   "pi", .valor.var=3.14159265358979323846},
+            {NUM,                   "e", .valor.var=2.7182818284590452354},
+            {COMANDO_SEN_PARAMETRO, "sair()", .valor.funcptr=sair},
+            {COMANDO_SEN_PARAMETRO, "axuda()", .valor.funcptr=axuda},
+            {COMANDO_CON_PARAMETRO, "echo()", .valor.funcptr=echo},
+            {COMANDO_SEN_PARAMETRO, "taboa()", .valor.funcptr=taboa},
+            {COMANDO_SEN_PARAMETRO, "workspace()", .valor.funcptr=workspace},
+            {COMANDO_SEN_PARAMETRO, "limpar()", .valor.funcptr=limpar},
+            {COMANDO_CON_PARAMETRO, "cargar()", .valor.funcptr=cargar},
+            {COMANDO_CON_PARAMETRO, "importar()", .valor.funcptr=importar},
     };
 
     crear(&TS);
-    for (int i = 0; i < (sizeof(keywords) / sizeof(tipoelem)); i++) {
-        insertar(&TS, keywords[i]);
+    for (int i = 0; i < (sizeof(inicializacion) / sizeof(tipoelem)); i++) {
+        insertar(&TS, inicializacion[i]);
     }
 }
 
@@ -39,7 +55,7 @@ void buscar_insertar(CompLexico *comp) {
     // Busca na TS un lexema concreto devolvéndoo en comp_busqueda
     buscar_nodo(TS, comp->lexema, &comp_busqueda);
     if (comp_busqueda.lexema == NULL) { // Se non está na TS, insértase e devólvese
-        comp->comp_lexico = ID;
+        comp->comp_lexico = VAR;
         insertar(&TS, *comp);
     } else {                            // Se está na TS, devólvese o atopado
         comp->comp_lexico = comp_busqueda.comp_lexico;

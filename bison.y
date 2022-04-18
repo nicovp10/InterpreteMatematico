@@ -2,9 +2,16 @@
 #define YYSTYPE double
 #include <math.h>
 %}
+%union {
+    double valor;
+    CompLexico *comp;
+}
 
+%token <valor> NUM
+%token <comp> VAR FUNC
 
-%token NUM VAR FUNC
+%type <valor> exp
+
 %left '-' '+'
 %left '*' '/'
 %left NEG
@@ -13,11 +20,11 @@
 
 
 %%
-entrada:
+entrada: %empty 
         | entrada linea
 ;
 
-line:   '\n'
+linea:   '\n'
         | ';'
         | exp '\n'
         | exp ';'
@@ -25,7 +32,7 @@ line:   '\n'
 
 exp:    NUM
         | VAR                   { $$ = $1->valor.var; }
-        | VAR '=' exp           { $$ = $1->valor.var = $3; }
+        | VAR '=' exp           { $$ = $3; $1->valor.var=$3; }
         | FUNC '(' exp ')'      { $$ = (*($1->valor.funcptr))($3); }
         | '-' exp %prec NEG     { $$ = -$2; }
         | exp '+' exp           { $$ = $1 + $3; }
@@ -34,3 +41,5 @@ exp:    NUM
         | exp '/' exp           { $$ = $1 / $3; }
         | exp '^' exp           { $$ = pow($1, $3); }
         | '(' exp ')'           { $$ = $2; }
+;
+%%

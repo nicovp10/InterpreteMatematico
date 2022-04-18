@@ -2,7 +2,7 @@
 #include "definicions.h"
 #include "taboaSimbolos.h"
 #include "xestionErros.h"
-CompLexico comp = {0, NULL};
+CompLexico comp = {0, NULL, 0};
 int erro = 0;
 %}
 
@@ -39,15 +39,15 @@ COMENTARIO_MULTI    \/\*(.|\n)*\*\/
 /* Compoñentes léxicos */
 IGNORAR             [ \t]
 
-INDIVIDUAL          [+\-\*\/\^=();\r\n]
-_SUMAIGUAL          +=
-_RESTAIGUAL         -=
+INDIVIDUAL          [\+\-\*\/^=\(\);\r\n]
+_SUMAIGUAL          \+=
+_RESTAIGUAL         \-=
 _MULTIGUAL          \*=
 _DIVIGUAL           \/=
 
 _NUM                 {ENTEIRO}|{DECIMAL}
 _VAR                 {IDENTIFICADOR}
-_FUNC                {IDENTIFICADOR}(.)
+_FUNC                {IDENTIFICADOR}\(.\)
 
 %%
 
@@ -65,7 +65,7 @@ _FUNC                {IDENTIFICADOR}(.)
 {_MULTIGUAL}            return MULTIGUAL;
 {_DIVIGUAL}             return DIVIGUAL;
 
-.                                   erro = 1; lanzarErro(yylineno, LEXEMA_DESCONOCIDO);
+.                       erro = 1; lanzarErro(yylineno, LEXEMA_DESCONOCIDO);
 
 <<EOF>>		yyterminate();
 
@@ -93,7 +93,7 @@ CompLexico segCompLexico() {
     strcpy(comp.lexema, yytext);
     comp.lexema[yyleng] = '\0';
 
-    if (!erro && comp.comp_lexico == ID) {
+    if (!erro && comp.comp_lexico == VAR) {
          buscar_insertar(&comp);
     } else {
         erro = 0;

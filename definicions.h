@@ -11,15 +11,16 @@ typedef struct {
     } valor;
 } CompLexico;
 
+#define COMANDO_SEN_PARAMETRO 300
+#define COMANDO_CON_PARAMETRO 301
+#define NUM 302
+#define VAR 303
+#define FUNC 304
 
-#define NUM 300
-#define VAR 301
-#define FUNC 302
-
-#define SUMAIGUAL 302           // +=
-#define RESTAIGUAL 304          // -=
-#define MULTIGUAL 305           // *=
-#define DIVIGUAL 306            // /=
+#define SUMAIGUAL 305           // +=
+#define RESTAIGUAL 306          // -=
+#define MULTIGUAL 307           // *=
+#define DIVIGUAL 308            // /=
 
 
 #endif

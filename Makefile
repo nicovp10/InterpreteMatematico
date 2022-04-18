@@ -13,11 +13,14 @@ OUTPUT = nicalc
 # Nome do ficheiro de flex
 FLEX_FILE = flex.l
 
+# Nome do ficheiro de bison
+BISON_FILE = bison.y
+
 # Ficheiros .h
-LIB_HEADERS = definicions.h lex.yy.h nicalc.h taboaSimbolos.h avl.h xestionErros.h
+LIB_HEADERS = definicions.h nicalc.h lex.yy.h bison.tab.h system.h taboaSimbolos.h avl.h xestionErros.h
 
 # Ficheiros .c
-SRCS = main.c lex.yy.c nicalc.c taboaSimbolos.c avl.c xestionErros.c
+SRCS = main.c nicalc.c lex.yy.c bison.tab.c system.c taboaSimbolos.c avl.c xestionErros.c
 
 # Ficheros .o: todos os .o cun análogo .c en SRCS
 OBJS = $(SRCS:.c=.o)
@@ -40,6 +43,10 @@ flex:
 	flex $(FLEX_FILE)
 	cp lex.yy_copia.h lex.yy.h
 
-# REGRA 4: borra o executable
+# REGRA 3: xera o código correspondente ao ficheiro de bison
+bison:
+	bison -Wall $(BISON_FILE)
+
+# REGRA 5: borra o executable
 clean:
 	rm -f $(OUTPUT)
