@@ -68,10 +68,12 @@
 /* First part of user prologue.  */
 #line 1 "bison.y"
 
-#define YYSTYPE double
 #include <math.h>
+#include "lex.yy.h"
 
-#line 75 "bison.tab.c"
+CompLexico comp;
+
+#line 77 "bison.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -102,7 +104,10 @@
 # define YYERROR_VERBOSE 0
 #endif
 
-
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_YY_BISON_TAB_H_INCLUDED
+# define YY_YY_BISON_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -127,12 +132,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 5 "bison.y"
+#line 9 "bison.y"
 
-    double valor;
-    CompLexico *comp;
+    double numero;
+    char *cadea;
 
-#line 136 "bison.tab.c"
+#line 141 "bison.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -145,7 +150,7 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-
+#endif /* !YY_YY_BISON_TAB_H_INCLUDED  */
 
 
 
@@ -508,8 +513,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    23,    23,    24,    27,    28,    29,    30,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42,    43
+       0,    29,    29,    30,    33,    34,    35,    36,    39,    40,
+      43,    44,    45,    46,    47,    48,    49,    50,    51
 };
 #endif
 
@@ -1319,67 +1324,69 @@ yyreduce:
   switch (yyn)
     {
   case 9:
-#line 34 "bison.y"
-                                { (yyval.valor) = (yyvsp[0].comp)->valor.var; }
-#line 1325 "bison.tab.c"
+#line 40 "bison.y"
+                                {
+                                    (yyval.numero) = (yyvsp[0].cadea).numero;
+                                }
+#line 1332 "bison.tab.c"
     break;
 
   case 10:
-#line 35 "bison.y"
-                                { (yyval.valor) = (yyvsp[0].valor); (yyvsp[-2].comp)->valor.var=(yyvsp[0].valor); }
-#line 1331 "bison.tab.c"
+#line 43 "bison.y"
+                                { (yyval.numero) = (yyvsp[0].numero); (yyvsp[-2].cadea)->valor.var=(yyvsp[0].numero); }
+#line 1338 "bison.tab.c"
     break;
 
   case 11:
-#line 36 "bison.y"
-                                { (yyval.valor) = (*((yyvsp[-3].comp)->valor.funcptr))((yyvsp[-1].valor)); }
-#line 1337 "bison.tab.c"
+#line 44 "bison.y"
+                                { (yyval.numero) = (*((yyvsp[-3].cadea)->valor.funcptr))((yyvsp[-1].numero)); }
+#line 1344 "bison.tab.c"
     break;
 
   case 12:
-#line 37 "bison.y"
-                                { (yyval.valor) = -(yyvsp[0].valor); }
-#line 1343 "bison.tab.c"
+#line 45 "bison.y"
+                                { (yyval.numero) = -(yyvsp[0].numero); }
+#line 1350 "bison.tab.c"
     break;
 
   case 13:
-#line 38 "bison.y"
-                                { (yyval.valor) = (yyvsp[-2].valor) + (yyvsp[0].valor); }
-#line 1349 "bison.tab.c"
+#line 46 "bison.y"
+                                { (yyval.numero) = (yyvsp[-2].numero) + (yyvsp[0].numero); }
+#line 1356 "bison.tab.c"
     break;
 
   case 14:
-#line 39 "bison.y"
-                                { (yyval.valor) = (yyvsp[-2].valor) - (yyvsp[0].valor); }
-#line 1355 "bison.tab.c"
+#line 47 "bison.y"
+                                { (yyval.numero) = (yyvsp[-2].numero) - (yyvsp[0].numero); }
+#line 1362 "bison.tab.c"
     break;
 
   case 15:
-#line 40 "bison.y"
-                                { (yyval.valor) = (yyvsp[-2].valor) * (yyvsp[0].valor); }
-#line 1361 "bison.tab.c"
+#line 48 "bison.y"
+                                { (yyval.numero) = (yyvsp[-2].numero) * (yyvsp[0].numero); }
+#line 1368 "bison.tab.c"
     break;
 
   case 16:
-#line 41 "bison.y"
-                                { (yyval.valor) = (yyvsp[-2].valor) / (yyvsp[0].valor); }
-#line 1367 "bison.tab.c"
+#line 49 "bison.y"
+                                { (yyval.numero) = (yyvsp[-2].numero) / (yyvsp[0].numero); }
+#line 1374 "bison.tab.c"
     break;
 
   case 17:
-#line 42 "bison.y"
-                                { (yyval.valor) = pow((yyvsp[-2].valor), (yyvsp[0].valor)); }
-#line 1373 "bison.tab.c"
+#line 50 "bison.y"
+                                { (yyval.numero) = pow((yyvsp[-2].numero), (yyvsp[0].numero)); }
+#line 1380 "bison.tab.c"
     break;
 
   case 18:
-#line 43 "bison.y"
-                                { (yyval.valor) = (yyvsp[-1].valor); }
-#line 1379 "bison.tab.c"
+#line 51 "bison.y"
+                                { (yyval.numero) = (yyvsp[-1].numero); }
+#line 1386 "bison.tab.c"
     break;
 
 
-#line 1383 "bison.tab.c"
+#line 1390 "bison.tab.c"
 
       default: break;
     }
@@ -1611,4 +1618,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 45 "bison.y"
+#line 53 "bison.y"

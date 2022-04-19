@@ -16,6 +16,9 @@ FLEX_FILE = flex.l
 # Nome do ficheiro de bison
 BISON_FILE = bison.y
 
+# Nome do arquivo comprimido
+ZIP_FILE = VilelaPerezNicolas_P3.zip
+
 # Ficheiros .h
 LIB_HEADERS = definicions.h nicalc.h lex.yy.h bison.tab.h system.h taboaSimbolos.h avl.h xestionErros.h
 
@@ -41,12 +44,15 @@ $(OUTPUT): $(OBJS)
 # REGRA 3: xera o código correspondente ao ficheiro de flex
 flex:
 	flex $(FLEX_FILE)
-	cp lex.yy_copia.h lex.yy.h
 
-# REGRA 3: xera o código correspondente ao ficheiro de bison
+# REGRA 4: xera o código correspondente ao ficheiro de bison
 bison:
-	bison -Wall $(BISON_FILE)
+	bison -Wall -d $(BISON_FILE)
 
-# REGRA 5: borra o executable
+# REGRA 5: xera un arquivo comprimido ZIP a partir do código fonte
+zip:
+	zip $(ZIP_FILE) Makefile $(SRCS) $(LIB_HEADERS) $(FLEX_FILE) $(BISON_FILE)
+
+# REGRA 6: borra o executable e o zip
 clean:
 	rm -f $(OUTPUT)

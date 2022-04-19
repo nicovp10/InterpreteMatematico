@@ -1,9 +1,11 @@
 %{
+#include <string.h>
+#include <math.h>
+
+#include "bison.tab.h"
 #include "definicions.h"
 #include "taboaSimbolos.h"
 #include "xestionErros.h"
-CompLexico comp = {0, NULL, 0};
-int erro = 0;
 %}
 
 
@@ -46,8 +48,6 @@ _MULTIGUAL          \*=
 _DIVIGUAL           \/=
 
 _NUM                 {ENTEIRO}|{DECIMAL}
-_VAR                 {IDENTIFICADOR}
-_FUNC                {IDENTIFICADOR}\(.\)
 
 %%
 
@@ -55,9 +55,15 @@ _FUNC                {IDENTIFICADOR}\(.\)
 {COMENTARIO_UNHA}
 {COMENTARIO_MULTI}
 
-{_NUM}                  return NUM;
-{_VAR}                  return VAR;
-{_FUNC}                 return FUNC;
+{_NUM}                  yylval.numero = atof(yytext); return NUM;
+{IDENTIFICADOR}         {
+                            yylval.cadea = strdup(yytext);
+                            int comp = buscar(yylval.cadea);
+                            if (comp == 0) {
+                                retunr ID;
+                            }
+                            return comp;
+                        }
 
 {INDIVIDUAL}            return (int) *yytext;
 {_SUMAIGUAL}            return SUMAIGUAL;
@@ -65,51 +71,8 @@ _FUNC                {IDENTIFICADOR}\(.\)
 {_MULTIGUAL}            return MULTIGUAL;
 {_DIVIGUAL}             return DIVIGUAL;
 
-.                       erro = 1; lanzarErro(yylineno, LEXEMA_DESCONOCIDO);
+.                       lanzarErro(yylineno, LEXEMA_DESCONOCIDO);
 
-<<EOF>>		yyterminate();
+<<EOF>>		            fclose(yyin); yyrestart(stdin);
 
 %%
-
-void iniciarAnalizadorLexico(char *nomeFicheiro) {
-    if ((yyin = fopen(nomeFicheiro, "r")) == NULL) {
-        lanzarErro(0, FICHEIRO_NON_ATOPADO);
-        exit(EXIT_FAILURE);
-    }
-
-    // Para que en caso de detectar un erro léxico non imprima os caracteres pendentes de procesar:
-    yyout = fopen("/dev/null", "w");
-}
-
-CompLexico segCompLexico() {
-    if (comp.lexema != NULL) {
-        free(comp.lexema);
-        comp.comp_lexico = 0;
-        comp.lexema = NULL;
-    }
-
-    comp.comp_lexico = yylex();
-    comp.lexema = malloc((yyleng + 1) * sizeof(char));
-    strcpy(comp.lexema, yytext);
-    comp.lexema[yyleng] = '\0';
-
-    if (!erro && comp.comp_lexico == VAR) {
-         buscar_insertar(&comp);
-    } else {
-        erro = 0;
-    }
-
-    return comp;
-}
-
-void finalizarAnalizadorLexico() {
-    if (comp.lexema != NULL) {
-        free(comp.lexema);
-        comp.comp_lexico = 0;
-        comp.lexema = NULL;
-    }
-
-    fclose(yyin);
-    fclose(yyout);
-	yylex_destroy();
-}

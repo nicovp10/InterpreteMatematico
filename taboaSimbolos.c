@@ -47,6 +47,19 @@ void iniciarTS() {
     }
 }
 
+// Función que busca un lexema concreto na táboa de símbolos.
+//  Se o lexema está na táboa, devolve o seu compoñente léxico.
+//  Se o lexema non está na táboa, devolve 0
+int buscar(char *lexema) {
+    tipoelem comp_busqueda = {0, NULL};
+    buscar_nodo(TS, lexema, &comp_busqueda);
+    if (comp_busqueda.lexema == NULL) {
+        return 0;
+    } else {
+        return comp_busqueda.comp_lexico;
+    }
+}
+
 // Función que busca un compoñente léxico concreto na táboa de símbolos
 //  Se este compoñente léxico non está na táboa, insértao
 void buscar_insertar(CompLexico *comp) {
@@ -59,6 +72,17 @@ void buscar_insertar(CompLexico *comp) {
         insertar(&TS, *comp);
     } else {                            // Se está na TS, devólvese o atopado
         comp->comp_lexico = comp_busqueda.comp_lexico;
+        switch (comp->comp_lexico) {
+            case FUNC:
+            case COMANDO_SEN_PARAMETRO:
+            case COMANDO_CON_PARAMETRO:
+                comp->valor.funcptr = comp_busqueda.valor.funcptr;
+                break;
+            case VAR:
+            case NUM:
+                comp->valor.var = comp_busqueda.valor.var;
+                break;
+        }
     }
 }
 

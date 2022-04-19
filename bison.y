@@ -1,16 +1,23 @@
 %{
-#define YYSTYPE double
 #include <math.h>
+#include "lex.yy.h"
+#include "taboaSimbolos.h"
+
+CompLexico comp;
 %}
+
+
 %union {
-    double valor;
-    CompLexico *comp;
+    double numero;
+    char *cadea;
 }
 
-%token <valor> NUM
-%token <comp> VAR FUNC
+%start entrada
 
-%type <valor> exp
+%token <numero> NUM
+%token <cadea> VAR FUNC
+
+%type <numero> exp
 
 %left '-' '+'
 %left '*' '/'
@@ -31,7 +38,11 @@ linea:   '\n'
 ;
 
 exp:    NUM
-        | VAR                   { $$ = $1->valor.var; }
+        | VAR                   {
+                                    comp.lexema = malloc(strlen($1) * sizeof(char));
+                                    strcpy(comp.lexema, $1);
+                                    buscar_insertar(&comp);
+                                }
         | VAR '=' exp           { $$ = $3; $1->valor.var=$3; }
         | FUNC '(' exp ')'      { $$ = (*($1->valor.funcptr))($3); }
         | '-' exp %prec NEG     { $$ = -$2; }

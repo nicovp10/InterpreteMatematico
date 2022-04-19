@@ -7,6 +7,11 @@
 // Función que inicia a táboa de símbolos
 void iniciarTS();
 
+// Función que busca un lexema concreto na táboa de símbolos.
+//  Se o lexema está na táboa, devolve o seu compoñente léxico.
+//  Se o lexema non está na táboa, devolve 0
+int buscar(char *lexema);
+
 // Función que busca un compoñente léxico concreto na táboa de símbolos
 //  Se este compoñente léxico non está na táboa, insértao
 void buscar_insertar(CompLexico *comp);
