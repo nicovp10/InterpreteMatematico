@@ -47,7 +47,7 @@ _MULTIGUAL          \*=
 _DIVIGUAL           \/=
 
 NUM                 {ENTEIRO}|{DECIMAL}
-FICHEIRO            ({LETRA}|{DIXITO}|\.|\-)+
+FICHEIRO            ({LETRA}|{DIXITO}|\.)+
 
 %%
 

@@ -30,8 +30,8 @@ void _auxImprimir(avl A) {
 // Función que inicia a táboa de símbolos
 void iniciarTS() {
     tipoelem inicializacion[] = {
-            {NUM,                   "pi", .valor.var=3.14159265358979323846},
-            {NUM,                   "e", .valor.var=2.7182818284590452354},
+            {CONST,                   "pi", .valor.var=3.14159265358979323846},
+            {CONST,                   "e", .valor.var=2.7182818284590452354},
             {CMND0, "sair", .valor.funcptr=sair},
             {CMND0, "axuda", .valor.funcptr=axuda},
             {CMND1, "echo", .valor.funcptr=echo},

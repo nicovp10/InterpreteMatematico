@@ -21,68 +21,133 @@ void yyerror (char *s) {
 %start entrada
 
 %token <numero> NUM
-%token <cadea> ID VAR FUNC CMND0 CMND1 FICHEIRO
+%token <cadea> CONST VAR FUNC CMND0 CMND1 FICHEIRO
 
-%type <numero> exp
+%type <numero> exp asig metodo
 
 %left '-' '+'
 %left '*' '/'
 %left '%'
-%precedence NEG
 %right '^'
 
 
 %%
-entrada: %empty 
+entrada: %empty         { printf("> "); }
         | entrada linea
 ;
 
-linea:   '\n'
-        | ';'
-        | exp '\n'
-        | exp ';' { printf("%lf\n", $1); }
+linea:   '\n'           { printf("> "); }
+        | exp '\n'      { printf("> "); }
+        | exp ';' '\n'  { printf("    %lf\n\n> ", $1); }
+        | asig '\n'     { printf("> "); }
+        | asig ';' '\n' { printf("    %lf\n\n> ", $1); }
 ;
 
-exp:    VAR                     {
-                                    if ((comp = buscar($1)).lexema != NULL) {
-                                        $$ = comp.valor.var;
-                                    } else {
-                                        lanzarErro(VARIABLE_NON_DEFINIDA);
-                                    }
+exp:    NUM
+        | CONST         {
+                            comp = buscar($1);
+                            $$ = comp.valor.var;
+                        }
+        | VAR           {
+                            if ((comp = buscar($1)).lexema != NULL) {
+                                $$ = comp.valor.var;
+                            } else {
+                                lanzarErro(VARIABLE_NON_DEFINIDA);
+                                $$ = NAN;
+                            }
+                        }
+        | '-' exp       {
+                             if (!isnan($2)) {
+                                 $$ = -$2;
+                             } else {
+                                 $$ = NAN;
+                             }
+                         }
+        | exp '+' exp   {
+                            if (!isnan($1) && !isnan($3)) {
+                                $$ = $1 + $3;
+                            } else {
+                                $$ = NAN;
+                            }
+                        }
+        | exp '-' exp   {
+                            if (!isnan($1) && !isnan($3)) {
+                                $$ = $1 - $3;
+                            } else {
+                                $$ = NAN;
+                            }
+                        }
+        | exp '*' exp   {
+                            if (!isnan($1) && !isnan($3)) {
+                                $$ = $1 * $3;
+                            } else {
+                                $$ = NAN;
+                            }
+                        }
+        | exp '/' exp   {
+                            if ($3 == 0) {
+                                lanzarErro(DIV_CERO);
+                                $$ = NAN;
+                            } else {
+                                if (!isnan($1) && !isnan($3)) {
+                                    $$ = $1 / $3;
+                                } else {
+                                    $$ = NAN;
                                 }
-        | VAR '=' exp           {
-                                    if ((comp = buscar($1)).lexema != NULL) {
-                                        modificarValorVariable($1, $3);
-                                    } else {
-                                        comp.lexema = strdup($1);
-                                        comp.comp_lexico = VAR;
-                                        comp.valor.var = $3;
-                                        insertar(comp);
-                                    }
-                                    $$ = $3;
+                            }
+                        }
+        | exp '%' exp   {
+                            if ($3 == 0) {
+                                lanzarErro(MOD_CERO);
+                                $$ = NAN;
+                            } else {
+                                if (!isnan($1) && !isnan($3)) {
+                                    $$ = fmod($1, $3);
+                                } else {
+                                    $$ = NAN;
                                 }
-        | FUNC '(' exp ')'      { }
-        | CMND0 '(' ')'             { }
-        | CMND1 '(' FICHEIRO ')'    { }
-        | '-' exp %prec NEG     { $$ = -$2; }
-        | exp '+' exp           { $$ = $1 + $3; }
-        | exp '-' exp           { $$ = $1 - $3; }
-        | exp '*' exp           { $$ = $1 * $3; }
-        | exp '/' exp           {
-                                    if ($3 == 0) {
-                                        lanzarErro(DIV_CERO);
-                                    } else {
-                                        $$ = $1 / $3;
-                                    }
-                                }
-        | exp '%' exp           {
-                                    if ($3 == 0) {
-                                        lanzarErro(MOD_CERO);
-                                    } else {
-                                        $$ = fmod($1, $3);
-                                    }
-                                }
-        | exp '^' exp           { $$ = pow($1, $3); }
-        | '(' exp ')'           { $$ = $2; }
+                            }
+                        }
+        | exp '^' exp   {
+                            if (!isnan($1) && !isnan($3)) {
+                                $$ = pow($1, $3);
+                            } else {
+                                $$ = NAN;
+                            }
+                        }
+        | '(' exp ')'   {
+                             if (!isnan($2)) {
+                                 $$ = $2;
+                             } else {
+                                 $$ = NAN;
+                             }
+                         }
+        | metodo
 ;
+
+asig:   VAR '=' exp     {
+                           if ((comp = buscar($1)).lexema != NULL) {
+                               modificarValorVariable($1, $3);
+                           } else {
+                               comp.lexema = strdup($1);
+                               comp.comp_lexico = VAR;
+                               comp.valor.var = $3;
+                               insertar(comp);
+                           }
+                           $$ = $3;
+                        }
+        | CONST '=' exp {
+                            lanzarErro(CONSTANTE_NON_MODIFICABLE);
+                            $$ = NAN;
+                        }
+
+metodo: FUNC '(' exp ')'            {
+
+                                    }
+        | CMND0 '(' ')'             {
+
+                                    }
+        | CMND1 '(' FICHEIRO ')'    {
+
+                                    }
 %%

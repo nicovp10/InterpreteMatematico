@@ -295,6 +295,9 @@ void insertar_nodo(avl *A, tipoelem E) {
         (*A)->info.lexema = malloc((strlen(E.lexema) + 1) * sizeof(char));
         //  Súmaselle 1 para o '\0' que inserta a función strcpy()
         strcpy((*A)->info.lexema, E.lexema);
+        (*A)->info.valor = E.valor;
+        (*A)->fe = 0;
+        (*A)->pai = NULL;
         (*A)->pai = NULL; // O pai inicialízase a NULL e especificarase cando se desapile esta chamada á función
         (*A)->izq = NULL;
         (*A)->der = NULL;
