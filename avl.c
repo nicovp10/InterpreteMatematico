@@ -346,6 +346,22 @@ void insertar_nodo(avl *A, tipoelem E) {
     }
 }
 
+// Función que modifica o valor de variable dun nodo na árbore (presuponse que existe un nodo coa mesma clave nesta)
+void modificar_nodo(avl *A, tipoclave cl, double valor) {
+    if (vacia(*A)) {
+        return;
+    }
+
+    int comp = _comparar_clave_elem(cl, (*A)->info);
+    if (comp == 0) {
+        (*A)->info.valor.var = valor;
+    } else if (comp < 0) {
+        modificar_nodo(&(*A)->izq, cl, valor);
+    } else {
+        modificar_nodo(&(*A)->der, cl, valor);
+    }
+}
+
 // Función que elimina un nodo da árbore
 void eliminar_nodo(avl *A, tipoelem E) {
 

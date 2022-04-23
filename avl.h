@@ -36,7 +36,10 @@ avl der(avl A);
 void buscar_nodo(avl A, tipoclave cl, tipoelem *nodo);
 
 // Función que inserta un novo nodo na árbore (presuponse que non existe un nodo coa misma clave nesta)
-void insertar(avl *A, tipoelem E);
+void insertar_nodo(avl *A, tipoelem E);
+
+// Función que modifica o valor de variable dun nodo na árbore (presuponse que existe un nodo coa mesma clave nesta)
+void modificar_nodo(avl *A, tipoclave cl, double valor);
 
 // Función que elimina un nodo da árbore
 void eliminar_nodo(avl *A, tipoelem E);

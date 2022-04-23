@@ -50,9 +50,13 @@ extern int yydebug;
   enum yytokentype
   {
     NUM = 258,
-    VAR = 259,
-    FUNC = 260,
-    NEG = 261
+    ID = 259,
+    VAR = 260,
+    FUNC = 261,
+    CMND0 = 262,
+    CMND1 = 263,
+    FICHEIRO = 264,
+    NEG = 265
   };
 #endif
 
@@ -60,12 +64,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "bison.y"
+#line 16 "bison.y"
 
     double numero;
     char *cadea;
 
-#line 69 "bison.tab.h"
+#line 73 "bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

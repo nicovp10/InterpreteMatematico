@@ -1,6 +1,9 @@
 # Opcións de compilación: mostra todos os warnings (-Wall)
 CC=gcc -Wall
 
+# Inclúusión das librerías estándares
+LIBS = -lm
+
 # Carpeta das cabeceiras
 HEADER_FILES_DIR = .
 
@@ -32,7 +35,7 @@ OBJS = $(SRCS:.c=.o)
 # REGRA 1: xera o executable, dependencia dos .o
 # Tras xeralos borra os .o
 $(OUTPUT): $(OBJS)
-	$(CC) -o $(OUTPUT) $(OBJS)
+	$(CC) -o $(OUTPUT) $(OBJS) $(LIBS)
 	rm *.o
 
 # REGRA 2: xera os .o cando é necesario, dependencia dos .c e .h
