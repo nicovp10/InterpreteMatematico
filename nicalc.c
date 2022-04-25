@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "nicalc.h"
+#include "lex.yy.h"
 #include "bison.tab.h"
 
 

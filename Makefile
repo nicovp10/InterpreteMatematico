@@ -2,7 +2,7 @@
 CC=gcc -Wall
 
 # Inclúusión das librerías estándares
-LIBS = -lm
+LIBS = -lm -ldl
 
 # Carpeta das cabeceiras
 HEADER_FILES_DIR = .
@@ -51,6 +51,7 @@ flex:
 # REGRA 4: xera o código correspondente ao ficheiro de bison
 bison:
 	bison -Wall -d $(BISON_FILE)
+	cp bison.tab_copia.h bison.tab.h
 
 # REGRA 5: xera un arquivo comprimido ZIP a partir do código fonte
 zip:

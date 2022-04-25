@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-#include "definicions.h"
+#include "nicalc.h"
 
 
 /*

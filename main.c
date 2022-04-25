@@ -7,7 +7,5 @@
 int main() {
     iniciarTS();
     nicalc();
-    finalizarTS();
-
     exit(EXIT_SUCCESS);
 }

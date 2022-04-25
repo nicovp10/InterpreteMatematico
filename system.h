@@ -2,17 +2,19 @@
 #define P3_SYSTEM_H
 
 
+double clear();
+
 double sair();
 
 double axuda();
 
-double echo(int valor);
+double echo();
 
 double taboa();
 
 double workspace();
 
-double limpar();
+double limparws();
 
 double cargar(char *ficheiro);
 

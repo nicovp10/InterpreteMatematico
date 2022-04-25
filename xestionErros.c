@@ -1,32 +1,38 @@
 #include <stdio.h>
 
 #include "xestionErros.h"
-
-
-#define ROJO "\x1b[31m    "
-#define RESET "\x1b[0m"
+#include "nicalc.h"
 
 
 // Función que dado un código de erro imprime por pantalla unha mensaxe concreta
 void lanzarErro(int codigo) {
     switch (codigo) {
         case FICHEIRO_NON_ATOPADO:
-            printf(ROJO"Erro: non se atopou o ficheiro indicado.\n\n"RESET);
+            printf(ROJO"Erro: non se atopou o ficheiro indicado."RESET"\n\n");
+            break;
+        case FICHEIRO_NON_INDICADO:
+            printf(ROJO"Erro: non se indicou o ficheiro necesario para a execución do comando."RESET"\n\n");
+            break;
+        case FICHEIRO_MAL_FORMATO:
+            printf(ROJO"Erro: ficheiro indicado con mal formato.\n\tDetalles: o ficheiro debe seguir o formato (LETRA|DIXITO)+.(LETRA|DIXITO)+."RESET"\n\n");
             break;
         case LEXEMA_DESCONOCIDO:
-            printf(ROJO"Erro: lexame non recoñecido.\n\tDetalles: o lexema non corresponde a ningún compoñente léxico.\n\n"RESET);
+            printf(ROJO"Erro: lexema non recoñecido.\n\tDetalles: o lexema non corresponde a ningún compoñente léxico."RESET"\n\n");
+            break;
+        case NAN_DETECTADO:
+            printf(ROJO"Erro: NaN detectado.\n\tDetalles: debido a algún fallo nalgunha operación da sentencia detectouse un NaN (Not a Number)."RESET"\n\n");
             break;
         case VARIABLE_NON_DEFINIDA:
-            printf(ROJO"Erro: variable non definida.\n\tDetalles: non se pode usar unha variable sen antes asignarlle un valor.\n\n"RESET);
+            printf(ROJO"Erro: variable non definida.\n\tDetalles: non se pode usar unha variable sen antes asignarlle un valor."RESET"\n\n");
             break;
         case CONSTANTE_NON_MODIFICABLE:
-            printf(ROJO"Erro: constante non modificable.\n\tDetalles: as constantes predifinidas non poden ser modificadas.\n\n"RESET);
+            printf(ROJO"Erro: constante non modificable.\n\tDetalles: as constantes predifinidas non poden ser modificadas."RESET"\n\n");
             break;
         case DIV_CERO:
-            printf(ROJO"Erro: divisón por cero.\n\tDetalles: non se pode realizar unha división na cal o divisor sexa 0.\n\n"RESET);
+            printf(ROJO"Erro: divisón por cero.\n\tDetalles: non se pode realizar unha división na cal o divisor sexa 0."RESET"\n\n");
             break;
         case MOD_CERO:
-            printf(ROJO"Erro: módulo por cero.\n\tDetalles: non se pode realizar un módulo no cal o divisor sexa 0.\n\n"RESET);
+            printf(ROJO"Erro: módulo por cero.\n\tDetalles: non se pode realizar un módulo no cal o divisor sexa 0."RESET"\n\n");
             break;
     }
 }

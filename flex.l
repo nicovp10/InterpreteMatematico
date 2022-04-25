@@ -2,6 +2,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "nicalc.h"
 #include "bison.tab.h"
 #include "definicions.h"
 #include "taboaSimbolos.h"
@@ -47,7 +48,7 @@ _MULTIGUAL          \*=
 _DIVIGUAL           \/=
 
 NUM                 {ENTEIRO}|{DECIMAL}
-FICHEIRO            ({LETRA}|{DIXITO}|\.)+
+FICHEIRO            ({LETRA}|{DIXITO})+\.({LETRA}|{DIXITO})+
 
 %%
 
@@ -74,6 +75,6 @@ FICHEIRO            ({LETRA}|{DIXITO}|\.)+
 
 .                       lanzarErro(LEXEMA_DESCONOCIDO);
 
-<<EOF>>		            fclose(yyin); yyrestart(stdin);
+<<EOF>>		            executandoScript(0); fclose(yyin); yyrestart(stdin);
 
 %%
