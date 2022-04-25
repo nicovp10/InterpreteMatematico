@@ -16,6 +16,9 @@ void lanzarErro(int codigo) {
         case FICHEIRO_MAL_FORMATO:
             printf(ROJO"Erro: ficheiro indicado con mal formato.\n\tDetalles: o ficheiro debe seguir o formato (LETRA|DIXITO)+.(LETRA|DIXITO)+."RESET"\n\n");
             break;
+        case FUNCION_NON_ATOPADA:
+            printf(ROJO"Erro: non se atopou a función indicada.\n\tDetalles: comproba se antes de invocar a función importaches a librería correspondente."RESET"\n\n");
+            break;
         case LEXEMA_DESCONOCIDO:
             printf(ROJO"Erro: lexema non recoñecido.\n\tDetalles: o lexema non corresponde a ningún compoñente léxico."RESET"\n\n");
             break;

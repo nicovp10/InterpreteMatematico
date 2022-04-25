@@ -2,8 +2,8 @@
 #include <dlfcn.h>
 
 #include "taboaSimbolos.h"
-#include "avl.h"
 #include "bison.tab.h"
+#include "avl.h"
 #include "system.h"
 
 
@@ -18,13 +18,15 @@ void _auxImprimirTS(avl A) {
         _auxImprimirTS(izq(A));
         ler(A, &E);
         if (E.comp_lexico == VAR) {
-            printf("    %-5d\t\t%-5s\t\t     %-5s\t\t%-5lf\n", E.comp_lexico, "Var.", E.lexema, E.valor.var);
+            printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Variable", E.lexema, E.valor.var);
         } else if (E.comp_lexico == CONST) {
-            printf("    %-5d\t\t%-5s\t\t     %-5s\t\t%-5lf\n", E.comp_lexico, "Const.", E.lexema, E.valor.var);
+            printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Constante", E.lexema, E.valor.var);
         } else if (E.comp_lexico == FUNC) {
-            printf("    %-5d\t\t%-5s\t\t     %-5s\t\t%-5s\n", E.comp_lexico, "Función", E.lexema, "---");
+            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Función", E.lexema, "---");
+        } else if (E.comp_lexico == LIB) {
+            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Librería", E.lexema, "---");
         } else {
-            printf("    %-5d\t\t%-5s\t\t     %-5s\t\t%-5s\n", E.comp_lexico, "Comando", E.lexema, "---");
+            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Comando", E.lexema, "---");
         }
         _auxImprimirTS(der(A));
     }
@@ -66,8 +68,10 @@ void iniciarTS() {
 }
 
 // Función que engade unha librería para o manexo das súas funcións
-void engadirLib(void *libreria) {
+void engadirLib(void *libreria, char *lexema) {
     lib = libreria;
+    tipoelem E = {LIB, lexema, .valor.libhandle=libreria};
+    insertar_nodo(&TS, E);
 }
 
 // Función que busca un lexema concreto na táboa de símbolos.
@@ -78,7 +82,7 @@ void engadirLib(void *libreria) {
 CompLexico buscar(char *lexema) {
     tipoelem comp_busqueda = {0, NULL};
     buscar_nodo(TS, lexema, &comp_busqueda);
-    if (comp_busqueda.lexema == NULL) {
+    if (comp_busqueda.lexema == NULL && lib != NULL) {
         void (*funcion)(void);
         *(void **) (&funcion) = dlsym(lib, lexema);
         if (funcion) {
@@ -91,7 +95,7 @@ CompLexico buscar(char *lexema) {
     return comp_busqueda;
 }
 
-// Función que inserta un compoñente léxico na árbore
+// Función que inserta un compoñente léxico na táboa de símbolos
 void insertar(CompLexico comp) {
     insertar_nodo(&TS, comp);
 }
@@ -119,13 +123,13 @@ void finalizarTS() {
 
 // Función que imprime a táboa de símbolos por orde alfabético dos lexemas
 void imprimirTS() {
-    printf("=============================================================================\n");
-    printf("\t\t\t     TÁBOA DE SÍMBOLOS\n");
-    printf("=============================================================================\n");
-    printf("    %-5s\t\t%-5s\t\t     %-5s\t\t%-5s\n", "Comp. léx.", "Tipo", "Lexema", "Valor");
-    printf("=============================================================================\n");
+    printf("============================================================\n");
+    printf("\t\t     TÁBOA DE SÍMBOLOS\n");
+    printf("============================================================\n");
+    printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Tipo", "Lexema", "Valor");
+    printf("============================================================\n");
     _auxImprimirTS(TS);
-    printf("=============================================================================\n\n");
+    printf("============================================================\n\n");
 }
 
 // Función que imprime a táboa de símbolos por orde alfabético dos lexemas

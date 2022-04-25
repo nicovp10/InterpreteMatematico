@@ -1,5 +1,5 @@
-#ifndef ANALIZADORSINTACTICO_H
-#define ANALIZADORSINTACTICO_H
+#ifndef NICALC_H
+#define NICALC_H
 
 
 #define ROJO "\x1b[31m    "
@@ -13,11 +13,13 @@ typedef struct {
     union {
         double var;
         double (*funcptr)();
+        void *libhandle;
     } valor;
 } CompLexico;
 
+
 // Función que invoca ao intérprete de expresións de cálculo matemático
-void nicalc();
+void nicalc(char *ficheiro);
 
 
 #endif

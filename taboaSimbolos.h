@@ -8,7 +8,7 @@
 void iniciarTS();
 
 // Función que engade unha librería para o manexo das súas funcións
-void engadirLib(void * libreria);
+void engadirLib(void * libreria, char *lexema);
 
 // Función que busca un lexema concreto na táboa de símbolos.
 //  Se o lexema está na táboa, devolve o seu compoñente léxico.
@@ -17,7 +17,7 @@ void engadirLib(void * libreria);
 //  Se o lexema non está na táboa nin nunha librería, devolve NULL.
 CompLexico buscar(char *lexema);
 
-// Función que inserta un compoñente léxico na árbore
+// Función que inserta un compoñente léxico na táboa de símbolos
 void insertar(CompLexico comp);
 
 // Función que modifica o valor de variable dun compoñente léxico na táboa de símbolos

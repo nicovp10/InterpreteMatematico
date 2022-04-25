@@ -1,8 +1,8 @@
 %{
 #include <math.h>
+
 #include "lex.yy.h"
 #include "taboaSimbolos.h"
-#include "definicions.h"
 #include "xestionErros.h"
 
 CompLexico comp;
@@ -22,7 +22,7 @@ void yyerror (char *s);
 %start entrada
 
 %token <numero> NUM
-%token <cadea> CONST VAR FUNC CMND0 CMND1 FICHEIRO
+%token <cadea> CONST VAR FUNC CMND0 CMND1 FICHEIRO LIB
 
 %type <numero> exp asig cmnd fnc
 
@@ -34,16 +34,22 @@ void yyerror (char *s);
 
 
 %%
-entrada: %empty         { printf(CYAN">"RESET" "); }
+entrada: %empty         {
+                            if (!script) {
+                                printf(CYAN">"RESET" ");
+                            }
+                        }
         | entrada linea
 ;
 
 linea:   '\n'           { printf(CYAN">"RESET" "); }
         | exp '\n'      {
-                            if (isnan($1) && !erro) {
-                                lanzarErro(NAN_DETECTADO);
-                            } else if (!erro && facerEcho) {
-                                printf(VERDE"%lf"RESET"\n\n", $1);
+                            if (!erro) {
+                                if (isnan($1)) {
+                                    lanzarErro(NAN_DETECTADO);
+                                } else if (facerEcho) {
+                                    printf(VERDE"%lf"RESET"\n\n", $1);
+                                }
                             }
                             if (!script) {
                                 printf(CYAN">"RESET" ");
@@ -51,10 +57,12 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                             erro = 0;
                         }
         | exp ';' '\n'  {
-                            if (isnan($1) && !erro) {
-                                lanzarErro(NAN_DETECTADO);
-                            } else if (!erro && facerEcho) {
-                                printf(VERDE"%lf"RESET"\n\n", $1);
+                            if (!erro) {
+                                if (isnan($1)) {
+                                    lanzarErro(NAN_DETECTADO);
+                                } else if (facerEcho) {
+                                    printf(VERDE"%lf"RESET"\n\n", $1);
+                                }
                             }
                             if (!script) {
                                 printf(CYAN">"RESET" ");
@@ -62,10 +70,12 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                             erro = 0;
                         }
         | asig '\n'     {
-                            if (isnan($1) && !erro) {
-                                lanzarErro(NAN_DETECTADO);
-                            } else if (!erro && facerEcho) {
-                                printf(VERDE"%lf"RESET"\n\n", $1);
+                            if (!erro) {
+                                if (isnan($1)) {
+                                    lanzarErro(NAN_DETECTADO);
+                                } else if (facerEcho) {
+                                    printf(VERDE"%lf"RESET"\n\n", $1);
+                                }
                             }
                             if (!script) {
                                 printf(CYAN">"RESET" ");
@@ -73,10 +83,12 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                             erro = 0;
                         }
         | asig ';' '\n' {
-                            if (isnan($1) && !erro) {
-                                lanzarErro(NAN_DETECTADO);
-                            } else if (!erro && facerEcho) {
-                                printf(VERDE"%lf"RESET"\n\n", $1);
+                            if (!erro) {
+                                if (isnan($1)) {
+                                    lanzarErro(NAN_DETECTADO);
+                                } else if (facerEcho) {
+                                    printf(VERDE"%lf"RESET"\n\n", $1);
+                                }
                             }
                             if (!script) {
                                 printf(CYAN">"RESET" ");
@@ -102,21 +114,25 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                                 erro = 0;
                             }
         | fnc '\n'          {
-                                if (isnan($1) && !erro) {
-                                    lanzarErro(NAN_DETECTADO);
-                                } else if (!erro && facerEcho) {
-                                    printf(VERDE"%lf"RESET"\n\n", $1);
+                                if (!erro) {
+                                    if (isnan($1)) {
+                                        lanzarErro(NAN_DETECTADO);
+                                    } else if (facerEcho) {
+                                        printf(VERDE"%lf"RESET"\n\n", $1);
+                                    }
                                 }
                                 if (!script) {
                                     printf(CYAN">"RESET" ");
                                 }
                                 erro = 0;
                             }
-        | fnc '\n' ';'      {
-                                if (isnan($1) && !erro) {
-                                    lanzarErro(NAN_DETECTADO);
-                                } else if (!erro && facerEcho) {
-                                    printf(VERDE"%lf"RESET"\n\n", $1);
+        | fnc ';' '\n'      {
+                                if (!erro) {
+                                    if (isnan($1)) {
+                                        lanzarErro(NAN_DETECTADO);
+                                    } else if (facerEcho) {
+                                        printf(VERDE"%lf"RESET"\n\n", $1);
+                                    }
                                 }
                                 if (!script) {
                                     printf(CYAN">"RESET" ");
@@ -261,6 +277,16 @@ fnc:    FUNC '(' exp ')'            {
                                         comp = buscar($1);
                                         $$ = (*(comp.valor.funcptr))($3);
                                     }
+        | VAR '(' exp ')'           {
+                                        lanzarErro(FUNCION_NON_ATOPADA);
+                                        erro = 1;
+                                        $$ = NAN;
+                                    }
+        | VAR '(' ')'               {
+                                        lanzarErro(FUNCION_NON_ATOPADA);
+                                        erro = 1;
+                                        $$ = NAN;
+                                    }
 %%
 void yyerror(char *s) {
     printf("Erro na análise sintáctica: %s\n", s);
@@ -269,9 +295,9 @@ void yyerror(char *s) {
 void cambiarEcho(int valor) {
     facerEcho = valor;
     if (facerEcho) {
-        printf(VERDE"    Echo activado."RESET"\n\n");
+        printf(VERDE"Echo activado."RESET"\n\n");
     } else {
-        printf(VERDE"    Echo desactivado."RESET"\n\n");
+        printf(ROJO"Echo desactivado."RESET"\n\n");
     }
 }
 

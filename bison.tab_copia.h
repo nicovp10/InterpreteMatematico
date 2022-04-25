@@ -47,8 +47,8 @@ extern int yydebug;
 /* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
+enum yytokentype
+{
     NUM = 258,
     CONST = 259,
     VAR = 260,
@@ -56,20 +56,21 @@ extern int yydebug;
     CMND0 = 262,
     CMND1 = 263,
     FICHEIRO = 264,
-    NEG = 265
-  };
+    LIB = 265,
+    NEG = 266
+};
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "bison.y"
+#line 17 "bison.y"
 
     double numero;
     char *cadea;
 
-#line 73 "bison.tab.h"
+#line 74 "bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

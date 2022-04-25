@@ -2,9 +2,6 @@
 #define ABB_H
 
 
-#include "definicions.h"
-
-
 // TIPO DE DATO OPACO DUNHA ÁRBORE AVL
 
 

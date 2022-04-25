@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <dlfcn.h>
 
 #include "nicalc.h"
+#include "bison.tab.h"
 
 
 /*
@@ -58,6 +59,9 @@ void destruir(avl *A) {
         destruir(&(*A)->izq);
         destruir(&(*A)->der);
         free((*A)->info.lexema);
+        if ((*A)->info.comp_lexico == LIB) {
+            dlclose((*A)->info.valor.libhandle);
+        }
         free(*A);
         *A = NULL;
     }

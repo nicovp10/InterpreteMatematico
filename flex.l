@@ -4,7 +4,6 @@
 
 #include "nicalc.h"
 #include "bison.tab.h"
-#include "definicions.h"
 #include "taboaSimbolos.h"
 #include "xestionErros.h"
 %}
@@ -42,13 +41,9 @@ COMENTARIO_MULTI    \/\*(.|\n)*\*\/
 IGNORAR             [ \t]
 
 INDIVIDUAL          [\+\-\*\/^=\(\);\r\n]
-_SUMAIGUAL          \+=
-_RESTAIGUAL         \-=
-_MULTIGUAL          \*=
-_DIVIGUAL           \/=
 
 NUM                 {ENTEIRO}|{DECIMAL}
-FICHEIRO            ({LETRA}|{DIXITO})+\.({LETRA}|{DIXITO})+
+FICHEIRO            ({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+
 
 %%
 
@@ -65,12 +60,7 @@ FICHEIRO            ({LETRA}|{DIXITO})+\.({LETRA}|{DIXITO})+
                             }
                             return comp.comp_lexico;
                         }
-
 {INDIVIDUAL}            return (int) *yytext;
-{_SUMAIGUAL}            return SUMAIGUAL;
-{_RESTAIGUAL}           return RESTAIGUAL;
-{_MULTIGUAL}            return MULTIGUAL;
-{_DIVIGUAL}             return DIVIGUAL;
 {FICHEIRO}              yylval.cadea = strdup(yytext); return FICHEIRO;
 
 .                       lanzarErro(LEXEMA_DESCONOCIDO);

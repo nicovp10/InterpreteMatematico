@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <dlfcn.h>
 
 #include "system.h"
-#include "nicalc.h"
 #include "lex.yy.h"
 #include "bison.tab.h"
 #include "xestionErros.h"
@@ -68,11 +68,11 @@ double cargar(char *ficheiro) {
 
 double importar(char *libreria) {
     void *lib = dlopen(libreria, RTLD_LAZY);
-
     if (lib == NULL) {
         printf(ROJO"Erro: apertura de librería fallida.\n\tDetalles: %s"RESET"\n\n", dlerror());
     } else {
-        engadirLib(lib);
+        char *lexema = strtok(libreria, ".");
+        engadirLib(lib, lexema);
     }
 
     return 0;
