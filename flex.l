@@ -40,7 +40,7 @@ COMENTARIO_MULTI    \/\*(.|\n)*\*\/
 /* Compoñentes léxicos */
 IGNORAR             [ \t]
 
-INDIVIDUAL          [\+\-\*\/^=\(\);\r\n]
+INDIVIDUAL          [\+\-\*\/^=\(\),;\r\n]
 
 NUM                 {ENTEIRO}|{DECIMAL}
 FICHEIRO            ({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+
@@ -54,7 +54,7 @@ FICHEIRO            ({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+
 {NUM}                   yylval.numero = atof(yytext); return NUM;
 {IDENTIFICADOR}         {
                             yylval.cadea = strdup(yytext);
-                            CompLexico comp = buscar(yylval.cadea);
+                            CompLexico comp = buscarLexema(yylval.cadea);
                             if (comp.lexema == NULL) {
                                 return VAR;
                             }

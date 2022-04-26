@@ -50,6 +50,7 @@ double workspace() {
 }
 
 double limparws() {
+    eliminarWS();
     return 0;
 }
 
@@ -68,11 +69,13 @@ double cargar(char *ficheiro) {
 
 double importar(char *libreria) {
     void *lib = dlopen(libreria, RTLD_LAZY);
+
     if (lib == NULL) {
         printf(ROJO"Erro: apertura de librería fallida.\n\tDetalles: %s"RESET"\n\n", dlerror());
     } else {
         char *lexema = strtok(libreria, ".");
-        engadirLib(lib, lexema);
+        CompLexico comp_lib = {LIB, lexema, .valor.libhandle=lib};
+        insertar(comp_lib);
     }
 
     return 0;

@@ -143,11 +143,11 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
 
 exp:    NUM
         | CONST         {
-                            comp = buscar($1);
+                            comp = buscarLexema($1);
                             $$ = comp.valor.var;
                         }
         | VAR           {
-                            if ((comp = buscar($1)).lexema != NULL) {
+                            if ((comp = buscarLexema($1)).lexema != NULL) {
                                 $$ = comp.valor.var;
                             } else {
                                 lanzarErro(VARIABLE_NON_DEFINIDA);
@@ -226,9 +226,9 @@ exp:    NUM
 ;
 
 asig:   VAR '=' exp     {
-                           if ((comp = buscar($1)).lexema != NULL) {
+                           if ((comp = buscarLexema($1)).lexema != NULL) {
                                modificarValorVariable($1, $3);
-                           } else {
+                           } else if (!erro) {
                                comp.lexema = strdup($1);
                                comp.comp_lexico = VAR;
                                comp.valor.var = $3;
@@ -236,19 +236,51 @@ asig:   VAR '=' exp     {
                            }
                            $$ = $3;
                         }
+        | VAR '=' fnc   {
+                           if ((comp = buscarLexema($1)).lexema != NULL) {
+                               modificarValorVariable($1, $3);
+                           } else if (!erro) {
+                               comp.lexema = strdup($1);
+                               comp.comp_lexico = VAR;
+                               comp.valor.var = $3;
+                               insertar(comp);
+                           }
+                           $$ = $3;
+                        }
+        | VAR '=' cmnd  {
+                            lanzarErro(SINTAXE_NON_VALIDA);
+                            erro = 1;
+                            $$ = NAN;
+                        }
         | CONST '=' exp {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             $$ = NAN;
                         }
+        | CONST '=' fnc {
+                            lanzarErro(CONSTANTE_NON_MODIFICABLE);
+                            erro = 1;
+                            $$ = NAN;
+                        }
+        | CONST '=' cmnd {
+                            lanzarErro(CONSTANTE_NON_MODIFICABLE);
+                            erro = 1;
+                            $$ = NAN;
+                        }
+;
 
 cmnd:   CMND0                       {
-                                        comp = buscar($1);
+                                        comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))();
                                     }
         | CMND0 '(' ')'             {
-                                        comp = buscar($1);
+                                        comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))();
+                                    }
+        | CMND0 exp                 {
+                                        lanzarErro(SINTAXE_NON_VALIDA);
+                                        erro = 1;
+                                        $$ = NAN;
                                     }
         | CMND1                     {
                                         lanzarErro(FICHEIRO_NON_INDICADO);
@@ -261,11 +293,11 @@ cmnd:   CMND0                       {
                                         $$ = NAN;
                                     }
         | CMND1 FICHEIRO            {
-                                        comp = buscar($1);
+                                        comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))($2);
                                     }
         | CMND1 '(' FICHEIRO ')'    {
-                                        comp = buscar($1);
+                                        comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))($3);
                                     }
         | CMND1 exp                 {
@@ -273,20 +305,108 @@ cmnd:   CMND0                       {
                                         erro = 1;
                                         $$ = NAN;
                                     }
-fnc:    FUNC '(' exp ')'            {
-                                        comp = buscar($1);
-                                        $$ = (*(comp.valor.funcptr))($3);
-                                    }
-        | VAR '(' exp ')'           {
-                                        lanzarErro(FUNCION_NON_ATOPADA);
-                                        erro = 1;
-                                        $$ = NAN;
-                                    }
-        | VAR '(' ')'               {
-                                        lanzarErro(FUNCION_NON_ATOPADA);
-                                        erro = 1;
-                                        $$ = NAN;
-                                    }
+;
+
+fnc:    LIB '/' FUNC '(' exp ')'            {
+                                                comp = buscarLexema($1);
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+                                                if (comp_func.lexema != NULL) {
+                                                    $$ = (*(comp_func.valor.funcptr))($5);
+                                                } else {
+                                                    lanzarErro(FUNCION_NON_ATOPADA);
+                                                    erro = 1;
+                                                    $$ = NAN;
+                                                }
+                                            }
+        | LIB '/' FUNC '(' exp ',' exp ')'  {
+                                                comp = buscarLexema($1);
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+                                                if (comp_func.lexema != NULL) {
+                                                    $$ = (*(comp_func.valor.funcptr))($5, $7);
+                                                } else {
+                                                    lanzarErro(FUNCION_NON_ATOPADA);
+                                                    erro = 1;
+                                                    $$ = NAN;
+                                                }
+                                            }
+        | LIB '/' FUNC '(' ')'              {
+                                                lanzarErro(PARAMETROS_NON_INDICADOS);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | LIB '/' VAR '(' exp ')'           {
+                                                comp = buscarLexema($1);
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+                                                if (comp_func.lexema != NULL) {
+                                                    $$ = (*(comp_func.valor.funcptr))($5);
+                                                } else {
+                                                    lanzarErro(FUNCION_NON_ATOPADA);
+                                                    erro = 1;
+                                                    $$ = NAN;
+                                                }
+                                            }
+        | LIB '/' VAR '(' exp ',' exp ')'   {
+                                                comp = buscarLexema($1);
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+                                                if (comp_func.lexema != NULL) {
+                                                    $$ = (*(comp_func.valor.funcptr))($5, $7);
+                                                } else {
+                                                    lanzarErro(FUNCION_NON_ATOPADA);
+                                                    erro = 1;
+                                                    $$ = NAN;
+                                                }
+                                            }
+        | LIB '/' VAR '(' ')'               {
+                                                lanzarErro(PARAMETROS_NON_INDICADOS);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | exp '(' exp ')'                   {
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | exp '(' exp ',' exp ')'           {
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | exp '(' ')'                       {
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | LIB '(' exp ')'                   {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | LIB '(' exp ',' exp ')'           {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | LIB '(' ')'                       {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | FUNC '(' exp ')'                  {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | FUNC '(' exp ',' exp ')'          {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+        | FUNC '(' ')'                      {
+                                                lanzarErro(SINTAXE_NON_VALIDA);
+                                                erro = 1;
+                                                $$ = NAN;
+                                            }
+;
 %%
 void yyerror(char *s) {
     printf("Erro na análise sintáctica: %s\n", s);

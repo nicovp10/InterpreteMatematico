@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
 
@@ -29,7 +30,8 @@ struct celda {
 typedef struct celda *avl;
 
 
-int equilibrar; // Variable usada para saber cando se ten que deixar de propagar o equilibrio cara arriba
+int equilibrar_insercion; // Variable usada para saber cando se ten que deixar de propagar o equilibrio cara arriba
+int reestruturacion_eliminacion; // Variable usada para saber cando ten lugar unha reestruturación durante a eliminación dun nodo
 
 
 // Función auxilizar que extrae a clave dun nodo
@@ -47,6 +49,14 @@ int _comparar_clave_elem(tipoclave cl, tipoelem E) {
     return _comparar_claves(cl, _clave_elem(&E));
 }
 
+// Función que destrúe o contido dun elemento
+void _destruir_elem(tipoelem *E) {
+    free(E->lexema);
+    if (E->comp_lexico == LIB) {
+        dlclose(E->valor.libhandle);
+    }
+}
+
 
 // Función que crea a árbore inicializando o punteiro a NULL
 void crear(avl *A) {
@@ -58,10 +68,7 @@ void destruir(avl *A) {
     if (*A != NULL) {
         destruir(&(*A)->izq);
         destruir(&(*A)->der);
-        free((*A)->info.lexema);
-        if ((*A)->info.comp_lexico == LIB) {
-            dlclose((*A)->info.valor.libhandle);
-        }
+        _destruir_elem(&((*A)->info));
         free(*A);
         *A = NULL;
     }
@@ -85,6 +92,14 @@ avl izq(avl A) {
 // Función que devolve a subárbore dereita de A
 avl der(avl A) {
     return A->der;
+}
+
+void debug(avl A) {
+    if (!vacia(A)) {
+        debug(izq(A));
+        printf("%p %p %p %p %d %s\n", A, A->pai, A->izq, A->der, A->fe, A->info.lexema);
+        debug(der(A));
+    }
 }
 
 // Función que busca un nodo na árbore. Se non o atopa devolve NULL en *nodo
@@ -175,7 +190,7 @@ void _DI(avl *A) {
     if ((*A)->fe == 1) {        // Se n2 (o novo n) ten FE = 1:
         (*A)->izq->fe = -1;
         (*A)->der->fe = 0;
-    } else if ((*A)->fe == -1){ // Se non se ten FE = -1:
+    } else if ((*A)->fe == -1) { // Se non se ten FE = -1:
         (*A)->izq->fe = 0;
         (*A)->der->fe = 1;
     } else {                    // Se non se ten FE = 0:
@@ -256,7 +271,7 @@ void _ID(avl *A) {
     if ((*A)->fe == 1) {        // Se n2 (o novo n) ten FE = 1:
         (*A)->izq->fe = -1;
         (*A)->der->fe = 0;
-    } else if ((*A)->fe == -1){ // Se non se ten FE = -1:
+    } else if ((*A)->fe == -1) { // Se non se ten FE = -1:
         (*A)->izq->fe = 0;
         (*A)->der->fe = 1;
     } else {                    // Se non se ten FE = 0:
@@ -290,6 +305,21 @@ void _reestruturar(avl *A) {
     }
 }
 
+// Funcion auxiliar que devolve mínimo de subárbore dereita
+tipoelem _suprimir_min(avl *A) {
+    avl aux;
+    tipoelem E;
+    if (vacia((*A)->izq)) { // Se á esquerda está vacío, devólvese o nodo actual
+        E = (*A)->info;
+        aux = *A;
+        *A = (*A)->der;
+        free(aux);
+        return E;
+    } else {
+        return _suprimir_min(&(*A)->izq); // Vólvese a buscar o mínimo da rama esquerda
+    }
+}
+
 
 // Función que inserta un novo nodo na árbore (presuponse que non existe un nodo coa misma clave nesta)
 void insertar_nodo(avl *A, tipoelem E) {
@@ -306,7 +336,7 @@ void insertar_nodo(avl *A, tipoelem E) {
         (*A)->izq = NULL;
         (*A)->der = NULL;
         (*A)->fe = 0; // Ao ser un nodo folla, o FE deste será 0
-        equilibrar = 1; // Ao insertarse un nodo actívase o propagación para equilibrar os FE
+        equilibrar_insercion = 1; // Ao insertarse un nodo actívase o propagación para equilibrar_insercion os FE
         return;
     }
 
@@ -321,8 +351,8 @@ void insertar_nodo(avl *A, tipoelem E) {
             (*A)->der->pai = *A;
         }
 
-        // Se hai que equilibrar, modifícase o FE
-        if (equilibrar) {
+        // Se hai que equilibrar_insercion, modifícase o FE
+        if (equilibrar_insercion) {
             (*A)->fe++;
         }
 
@@ -330,7 +360,7 @@ void insertar_nodo(avl *A, tipoelem E) {
 
         // Se xa se chegou ao equilibrio, non se seguirá propagando o reaxuste cara arriba
         if ((*A)->fe == 0) {
-            equilibrar = 0;
+            equilibrar_insercion = 0;
         }
     } else {
         insertar_nodo(&(*A)->izq, E);
@@ -339,8 +369,8 @@ void insertar_nodo(avl *A, tipoelem E) {
             (*A)->izq->pai = *A;
         }
 
-        // Se hai que equilibrar, modifícase o FE
-        if (equilibrar) {
+        // Se hai que equilibrar_insercion, modifícase o FE
+        if (equilibrar_insercion) {
             (*A)->fe--;
         }
 
@@ -348,7 +378,7 @@ void insertar_nodo(avl *A, tipoelem E) {
 
         // Se xa se chegou ao equilibrio, non se seguirá propagando o reaxuste cara arriba
         if ((*A)->fe == 0) {
-            equilibrar = 0;
+            equilibrar_insercion = 0;
         }
     }
 }
@@ -371,5 +401,85 @@ void modificar_nodo(avl *A, tipoclave cl, double valor) {
 
 // Función que elimina un nodo da árbore
 void eliminar_nodo(avl *A, tipoelem E) {
+    avl aux;
+    if (vacia(*A)) {
+        return;
+    }
 
+    tipoclave cl = _clave_elem(&E);
+    int comp = _comparar_clave_elem(cl, (*A)->info);
+    if (comp < 0) { // Se (E < (*A)->info)
+        eliminar_nodo(&(*A)->izq, E);
+        printf("%s\n", (*A)->info.lexema);
+        _reestruturar(A);
+    } else if (comp > 0) { // Se (E > (*A)->info)
+        eliminar_nodo(&(*A)->der, E);
+        printf("%s\n", (*A)->info.lexema);
+        _reestruturar(A);
+    } else if (vacia((*A)->izq) && vacia((*A)->der)) { // Se está vacío a ambos lados:
+        if (!vacia((*A)->pai)) { // Se non ten pai, non hai a quen axustar o peso
+            if (!vacia((*A)->pai->izq)) { // Se o pai ten fillo esquerdo:
+                if (strcmp((*A)->info.lexema, (*A)->pai->izq->info.lexema) == 0) { // Se é o fillo esquerdo:
+                    (*A)->pai->fe++;
+                } else { // Se é o fillo dereito:
+                    (*A)->pai->fe--;
+                }
+            } else { // Se o pai non ten fillo esquerdo, significa que estaba á dereita
+                (*A)->pai->fe--;
+            }
+        }
+
+        _destruir_elem(&((*A)->info));
+        free(*A);
+        *A = NULL;
+    } else if (vacia((*A)->izq)) { // Se está vacío á dereita e non á esquerda:
+        if (!vacia((*A)->pai)) { // Se non ten pai, non hai a quen axustar o peso
+            if (!vacia((*A)->pai->izq)) { // Se o pai ten fillo esquerdo:
+                if (strcmp((*A)->info.lexema, (*A)->pai->izq->info.lexema) == 0) { // Se é o fillo esquerdo:
+                    (*A)->pai->fe++;
+                } else { // Se é o fillo dereito:
+                    (*A)->pai->fe--;
+                }
+            } else { // Se o pai non ten fillo esquerdo, significa que estaba á dereita
+                (*A)->pai->fe--;
+            }
+        }
+
+        aux = *A;
+        *A = (*A)->der;
+        _destruir_elem(&aux->info);
+        free(aux);
+    } else if (vacia((*A)->der)) { // Se está vacío á esquerda e non á dereita:
+        if (!vacia((*A)->pai)) { // Se non ten pai, non hai a quen axustar o peso
+            if (!vacia((*A)->pai->izq)) { // Se o pai ten fillo esquerdo:
+                if (strcmp((*A)->info.lexema, (*A)->pai->izq->info.lexema) == 0) { // Se é o fillo esquerdo:
+                    (*A)->pai->fe++;
+                } else { // Se é o fillo dereito:
+                    (*A)->pai->fe--;
+                }
+            } else { // Se o pai non ten fillo esquerdo, significa que estaba á dereita
+                (*A)->pai->fe--;
+            }
+        }
+
+        aux = *A;
+        *A = (*A)->izq;
+        _destruir_elem(&aux->info);
+        free(aux);
+    } else { // Se non está vacío nin á dereita nin á esquerda:
+        if (!vacia((*A)->pai)) { // Se non ten pai, non hai a quen axustar o peso
+            if (!vacia((*A)->pai->izq)) { // Se o pai ten fillo esquerdo:
+                if (strcmp((*A)->info.lexema, (*A)->pai->izq->info.lexema) == 0) { // Se é o fillo esquerdo:
+                    (*A)->pai->fe++;
+                } else { // Se é o fillo dereito:
+                    (*A)->pai->fe--;
+                }
+            } else { // Se o pai non ten fillo esquerdo, significa que estaba á dereita
+                (*A)->pai->fe--;
+            }
+        }
+
+        _destruir_elem(&(*A)->info); // Elimino a información sen liberar o nodo
+        (*A)->info = _suprimir_min(&(*A)->der); // No seu lugar ponse o mínimo da subárbore dereita
+    }
 }

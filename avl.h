@@ -41,5 +41,7 @@ void modificar_nodo(avl *A, tipoclave cl, double valor);
 // Función que elimina un nodo da árbore
 void eliminar_nodo(avl *A, tipoelem E);
 
+void debug(avl A);
+
 
 #endif

@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <dlfcn.h>
 
 #include "taboaSimbolos.h"
@@ -8,7 +10,8 @@
 
 
 avl TS;
-void *lib;
+
+int num_variables = 0;
 
 
 // Función auxiliar que realiza un recorrido inorde da árbore, imprimindo tod o contido
@@ -17,16 +20,22 @@ void _auxImprimirTS(avl A) {
     if (!vacia(A)) {
         _auxImprimirTS(izq(A));
         ler(A, &E);
-        if (E.comp_lexico == VAR) {
-            printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Variable", E.lexema, E.valor.var);
-        } else if (E.comp_lexico == CONST) {
-            printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Constante", E.lexema, E.valor.var);
-        } else if (E.comp_lexico == FUNC) {
-            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Función", E.lexema, "---");
-        } else if (E.comp_lexico == LIB) {
-            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Librería", E.lexema, "---");
-        } else {
-            printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Comando", E.lexema, "---");
+        switch (E.comp_lexico) {
+            case VAR:
+                printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Variable", E.lexema, E.valor.var);
+                break;
+            case CONST:
+                printf("    %-5s\t\t     %-5s\t\t%-5lf\n", "Constante", E.lexema, E.valor.var);
+                break;
+            case FUNC:
+                printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Función", E.lexema, "---");
+                break;
+            case LIB:
+                printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Librería", E.lexema, "---");
+                break;
+            default:
+                printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Comando", E.lexema, "---");
+                break;
         }
         _auxImprimirTS(der(A));
     }
@@ -44,6 +53,31 @@ void _auxImprimirWS(avl A) {
         _auxImprimirWS(der(A));
     }
 }
+
+// Función auxiliar que realiza a eliminación recursiva dunha variable da táboa de símbolos
+void _auxEliminarVariable(avl A, int *atopada) {
+    tipoelem E;
+    if (!vacia(A) && !*atopada) {
+        _auxEliminarVariable(izq(A), atopada);
+        ler(A, &E);
+        if (E.comp_lexico == VAR && !*atopada) {
+            eliminar_nodo(&TS, E);
+            *atopada = 1;
+        }
+        _auxEliminarVariable(der(A), atopada);
+    }
+}
+
+// Función auxiliar que realiza a chamada á función recursiva para eliminar unha variable da táboa de símbolos
+void _eliminarVariable() {
+    int atopada = 0;
+    printf("\n\n");
+    _auxEliminarVariable(TS, &atopada);
+    printf("\n\n");
+    debug(TS);
+    printf("\n\n");
+}
+
 
 // Función que inicia a táboa de símbolos
 void iniciarTS() {
@@ -67,27 +101,31 @@ void iniciarTS() {
     }
 }
 
-// Función que engade unha librería para o manexo das súas funcións
-void engadirLib(void *libreria, char *lexema) {
-    lib = libreria;
-    tipoelem E = {LIB, lexema, .valor.libhandle=libreria};
-    insertar_nodo(&TS, E);
-}
-
 // Función que busca un lexema concreto na táboa de símbolos.
 //  Se o lexema está na táboa, devolve o seu compoñente léxico.
 //  Se o lexema non está na táboa, búscase se está nunha librería e,
 //      de ser así, insértase na táboa de símbolos.
 //  Se o lexema non está na táboa nin nunha librería, devolve NULL.
-CompLexico buscar(char *lexema) {
+CompLexico buscarLexema(char *lexema) {
     tipoelem comp_busqueda = {0, NULL};
     buscar_nodo(TS, lexema, &comp_busqueda);
-    if (comp_busqueda.lexema == NULL && lib != NULL) {
+    return comp_busqueda;
+}
+
+// Función que busca unha función concreta na táboa de símbolos.
+//  Se a función está na táboa, devolve o seu compoñente léxico.
+//  Se o lexema non está na táboa, búscase se está na librería
+//      indicada e, de ser así, insértase na táboa de símbolos.
+//  Se o lexema non está na táboa nin na librería, devolve NULL.
+CompLexico buscarFuncion(void *lib, char *lexema_funcion) {
+    tipoelem comp_busqueda = {0, NULL};
+    buscar_nodo(TS, lexema_funcion, &comp_busqueda);
+    if (comp_busqueda.lexema == NULL) {
         void (*funcion)(void);
-        *(void **) (&funcion) = dlsym(lib, lexema);
+        *(void **) (&funcion) = dlsym(lib, lexema_funcion);
         if (funcion) {
             comp_busqueda.comp_lexico = FUNC;
-            comp_busqueda.lexema = lexema;
+            comp_busqueda.lexema = lexema_funcion;
             comp_busqueda.valor.funcptr = (double (*)()) funcion;
             insertar(comp_busqueda);
         }
@@ -97,6 +135,9 @@ CompLexico buscar(char *lexema) {
 
 // Función que inserta un compoñente léxico na táboa de símbolos
 void insertar(CompLexico comp) {
+    if (comp.comp_lexico == VAR) {
+        num_variables++;
+    }
     insertar_nodo(&TS, comp);
 }
 
@@ -111,9 +152,12 @@ void modificarValorVariable(char *lexema, double valor) {
     }
 }
 
-// Función que elimina un compoñente léxico concreto da táboa de símbolos
-void eliminar(CompLexico compLexico) {
-    eliminar_nodo(&TS, compLexico);
+// Función que elimina todas as variables da táboa de símbolos
+void eliminarWS() {
+    for (int i = 0; i < num_variables; i++) {
+        _eliminarVariable();
+    }
+    num_variables = 0;
 }
 
 // Función que finaliza a táboa de símbolos
@@ -123,22 +167,23 @@ void finalizarTS() {
 
 // Función que imprime a táboa de símbolos por orde alfabético dos lexemas
 void imprimirTS() {
-    printf("============================================================\n");
-    printf("\t\t     TÁBOA DE SÍMBOLOS\n");
-    printf("============================================================\n");
-    printf("    %-5s\t\t     %-5s\t\t%-5s\n", "Tipo", "Lexema", "Valor");
-    printf("============================================================\n");
+    printf("============================================================\n"
+           "\t\t     TÁBOA DE SÍMBOLOS\n"
+           "============================================================\n"
+           "    %-5s\t\t     %-5s\t\t%-5s\n"
+           "============================================================\n", "Tipo", "Lexema", "Valor");
     _auxImprimirTS(TS);
     printf("============================================================\n\n");
 }
 
-// Función que imprime a táboa de símbolos por orde alfabético dos lexemas
+// Función que imprime as variables da táboa de símbolos por orde alfabético dos lexemas
 void imprimirWS() {
-    printf("=======================================\n");
-    printf("\t     WORKSPACE\n");
-    printf("=======================================\n");
-    printf("    %-5s\t\t%-5s\n", "Lexema", "Valor");
-    printf("=======================================\n");
+    printf("=======================================\n"
+           "\t     WORKSPACE\n"
+           "=======================================\n"
+           "    %-5s\t\t%-5s\n"
+           "=======================================\n", "Lexema", "Valor");
     _auxImprimirWS(TS);
     printf("=======================================\n\n");
+    debug(TS);
 }

@@ -7,6 +7,9 @@
 // Función que dado un código de erro imprime por pantalla unha mensaxe concreta
 void lanzarErro(int codigo) {
     switch (codigo) {
+        case SINTAXE_NON_VALIDA:
+            printf(ROJO"Erro: sintaxe non válida. Escriba 'axuda()' para máis información."RESET"\n\n");
+            break;
         case FICHEIRO_NON_ATOPADO:
             printf(ROJO"Erro: non se atopou o ficheiro indicado."RESET"\n\n");
             break;
@@ -16,8 +19,14 @@ void lanzarErro(int codigo) {
         case FICHEIRO_MAL_FORMATO:
             printf(ROJO"Erro: ficheiro indicado con mal formato.\n\tDetalles: o ficheiro debe seguir o formato (LETRA|DIXITO)+.(LETRA|DIXITO)+."RESET"\n\n");
             break;
+        case LIBRERIA_NON_ATOPADA:
+            printf(ROJO"Erro: non se atopou a librería indicada.\n\tDetalles: comproba se antes de invocar a función importaches dita librería."RESET"\n\n");
+            break;
         case FUNCION_NON_ATOPADA:
-            printf(ROJO"Erro: non se atopou a función indicada.\n\tDetalles: comproba se antes de invocar a función importaches a librería correspondente."RESET"\n\n");
+            printf(ROJO"Erro: non se atopou a función indicada.\n\tDetalles: comproba se a función existe na librería indicada."RESET"\n\n");
+            break;
+        case PARAMETROS_NON_INDICADOS:
+            printf(ROJO"Erro: parámetros non indicados.\n\tDetalles: non se indicaron parámetros para a función indicada."RESET"\n\n");
             break;
         case LEXEMA_DESCONOCIDO:
             printf(ROJO"Erro: lexema non recoñecido.\n\tDetalles: o lexema non corresponde a ningún compoñente léxico."RESET"\n\n");

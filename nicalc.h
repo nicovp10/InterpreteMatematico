@@ -19,7 +19,7 @@ typedef struct {
 
 
 // Función que invoca ao intérprete de expresións de cálculo matemático
-void nicalc(char *ficheiro);
+void nicalc(char *arg);
 
 
 #endif

@@ -378,7 +378,7 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    4,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
-        4,    5,    6,    1,    6,    7,    8,    9,    9,    9,
+        4,    5,    6,    4,    6,    7,    8,    9,    9,    9,
         9,    9,    9,    9,    9,    9,    9,    1,    4,    1,
         4,    1,    1,    1,   10,   10,   10,   10,   11,   10,
        10,   10,   10,   10,   10,   10,   10,   10,   10,   10,
@@ -793,7 +793,7 @@ YY_RULE_SETUP
 #line 55 "flex.l"
 {
                             yylval.cadea = strdup(yytext);
-                            CompLexico comp = buscar(yylval.cadea);
+                            CompLexico comp = buscarLexema(yylval.cadea);
                             if (comp.lexema == NULL) {
                                 return VAR;
                             }
