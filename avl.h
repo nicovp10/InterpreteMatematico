@@ -1,6 +1,7 @@
 #ifndef ABB_H
 #define ABB_H
 
+#include "nicalc.h"
 
 // TIPO DE DATO OPACO DUNHA ÁRBORE AVL
 

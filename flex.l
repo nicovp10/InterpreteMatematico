@@ -43,7 +43,7 @@ IGNORAR             [ \t]
 INDIVIDUAL          [\+\-\*\/^=\(\),;\r\n]
 
 NUM                 {ENTEIRO}|{DECIMAL}
-FICHEIRO            ({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+
+FICHEIRO            ({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+|(\/({LETRA}|{DIXITO})*)*\/({LETRA}|{DIXITO})+(\.({LETRA}|{DIXITO})+)+
 
 %%
 

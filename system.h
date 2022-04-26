@@ -12,7 +12,7 @@ double echo();
 
 double taboa();
 
-double workspace();
+double ws();
 
 double limparws();
 

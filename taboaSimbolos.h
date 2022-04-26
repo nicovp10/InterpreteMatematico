@@ -19,7 +19,7 @@ CompLexico buscarLexema(char *lexema);
 //  Se o lexema non está na táboa, búscase se está na librería
 //      indicada e, de ser así, insértase na táboa de símbolos.
 //  Se o lexema non está na táboa nin na librería, devolve NULL.
-CompLexico buscarFuncion(void* lib, char *lexema_funcion);
+CompLexico buscarFuncion(void *lib, char *lexema_funcion, char *libfunc);
 
 // Función que inserta un compoñente léxico na táboa de símbolos
 void insertar(CompLexico comp);

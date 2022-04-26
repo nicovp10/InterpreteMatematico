@@ -233,6 +233,7 @@ asig:   VAR '=' exp     {
                                comp.comp_lexico = VAR;
                                comp.valor.var = $3;
                                insertar(comp);
+                               free(comp.lexema);
                            }
                            $$ = $3;
                         }
@@ -244,6 +245,7 @@ asig:   VAR '=' exp     {
                                comp.comp_lexico = VAR;
                                comp.valor.var = $3;
                                insertar(comp);
+                               free(comp.lexema);
                            }
                            $$ = $3;
                         }
@@ -307,9 +309,16 @@ cmnd:   CMND0                       {
                                     }
 ;
 
-fnc:    LIB '/' FUNC '(' exp ')'            {
+fnc:    LIB '/' VAR '(' exp ')'             {
                                                 comp = buscarLexema($1);
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+
+                                                char *libfunc = malloc(((strlen($1) + strlen($3) + 2) * sizeof(char)));
+                                                strncpy(libfunc, $1, strlen($1));
+                                                strncpy(libfunc + strlen($1), "/", 2);
+                                                strncpy(libfunc + strlen($1) + 1, $3, strlen($3));
+                                                libfunc[strlen($1) + strlen($3) + 1] = '\0';
+
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3, libfunc);
                                                 if (comp_func.lexema != NULL) {
                                                     $$ = (*(comp_func.valor.funcptr))($5);
                                                 } else {
@@ -317,37 +326,18 @@ fnc:    LIB '/' FUNC '(' exp ')'            {
                                                     erro = 1;
                                                     $$ = NAN;
                                                 }
-                                            }
-        | LIB '/' FUNC '(' exp ',' exp ')'  {
-                                                comp = buscarLexema($1);
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
-                                                if (comp_func.lexema != NULL) {
-                                                    $$ = (*(comp_func.valor.funcptr))($5, $7);
-                                                } else {
-                                                    lanzarErro(FUNCION_NON_ATOPADA);
-                                                    erro = 1;
-                                                    $$ = NAN;
-                                                }
-                                            }
-        | LIB '/' FUNC '(' ')'              {
-                                                lanzarErro(PARAMETROS_NON_INDICADOS);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | LIB '/' VAR '(' exp ')'           {
-                                                comp = buscarLexema($1);
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
-                                                if (comp_func.lexema != NULL) {
-                                                    $$ = (*(comp_func.valor.funcptr))($5);
-                                                } else {
-                                                    lanzarErro(FUNCION_NON_ATOPADA);
-                                                    erro = 1;
-                                                    $$ = NAN;
-                                                }
+                                                free(libfunc);
                                             }
         | LIB '/' VAR '(' exp ',' exp ')'   {
                                                 comp = buscarLexema($1);
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3);
+
+                                                char *libfunc = malloc(((strlen($1) + strlen($3) + 2) * sizeof(char)));
+                                                strncpy(libfunc, $1, strlen($1));
+                                                strncpy(libfunc + strlen($1), "/", 2);
+                                                strncpy(libfunc + strlen($1) + 1, $3, strlen($3));
+                                                libfunc[strlen($1) + strlen($3) + 1] = '\0';
+
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, $3, libfunc);
                                                 if (comp_func.lexema != NULL) {
                                                     $$ = (*(comp_func.valor.funcptr))($5, $7);
                                                 } else {
@@ -355,6 +345,7 @@ fnc:    LIB '/' FUNC '(' exp ')'            {
                                                     erro = 1;
                                                     $$ = NAN;
                                                 }
+                                                free(libfunc);
                                             }
         | LIB '/' VAR '(' ')'               {
                                                 lanzarErro(PARAMETROS_NON_INDICADOS);
@@ -424,6 +415,6 @@ void cambiarEcho(int valor) {
 void executandoScript(int valor) {
     script = valor;
     if (!script) {
-        printf("\n"VERDE"Script executado correctamente."RESET"\n\n"CYAN">"RESET" ");
+        printf("\n"AMARILLO"Script executado correctamente."RESET"\n\n"CYAN">"RESET" ");
     }
 }

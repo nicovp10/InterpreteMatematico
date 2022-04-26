@@ -64,18 +64,16 @@ void _auxEliminarVariable(avl A, int *atopada) {
             eliminar_nodo(&TS, E);
             *atopada = 1;
         }
-        _auxEliminarVariable(der(A), atopada);
+        if (!*atopada) {
+            _auxEliminarVariable(der(A), atopada);
+        }
     }
 }
 
 // Función auxiliar que realiza a chamada á función recursiva para eliminar unha variable da táboa de símbolos
 void _eliminarVariable() {
     int atopada = 0;
-    printf("\n\n");
     _auxEliminarVariable(TS, &atopada);
-    printf("\n\n");
-    debug(TS);
-    printf("\n\n");
 }
 
 
@@ -89,7 +87,7 @@ void iniciarTS() {
             {CMND0, "axuda", .valor.funcptr=axuda},
             {CMND0, "echo", .valor.funcptr=echo},
             {CMND0, "taboa", .valor.funcptr=taboa},
-            {CMND0, "workspace", .valor.funcptr=workspace},
+            {CMND0, "ws", .valor.funcptr=ws},
             {CMND0, "limparws", .valor.funcptr=limparws},
             {CMND1, "cargar", .valor.funcptr=cargar},
             {CMND1, "importar", .valor.funcptr=importar},
@@ -117,7 +115,7 @@ CompLexico buscarLexema(char *lexema) {
 //  Se o lexema non está na táboa, búscase se está na librería
 //      indicada e, de ser así, insértase na táboa de símbolos.
 //  Se o lexema non está na táboa nin na librería, devolve NULL.
-CompLexico buscarFuncion(void *lib, char *lexema_funcion) {
+CompLexico buscarFuncion(void *lib, char *lexema_funcion, char *libfunc) {
     tipoelem comp_busqueda = {0, NULL};
     buscar_nodo(TS, lexema_funcion, &comp_busqueda);
     if (comp_busqueda.lexema == NULL) {
@@ -125,9 +123,9 @@ CompLexico buscarFuncion(void *lib, char *lexema_funcion) {
         *(void **) (&funcion) = dlsym(lib, lexema_funcion);
         if (funcion) {
             comp_busqueda.comp_lexico = FUNC;
-            comp_busqueda.lexema = lexema_funcion;
+            comp_busqueda.lexema = libfunc;
             comp_busqueda.valor.funcptr = (double (*)()) funcion;
-            insertar(comp_busqueda);
+            insertar_nodo(&TS, comp_busqueda);
         }
     }
     return comp_busqueda;
@@ -185,5 +183,4 @@ void imprimirWS() {
            "=======================================\n", "Lexema", "Valor");
     _auxImprimirWS(TS);
     printf("=======================================\n\n");
-    debug(TS);
 }

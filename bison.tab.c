@@ -469,16 +469,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   299
+#define YYLAST   271
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  24
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  52
+#define YYNRULES  49
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  102
+#define YYNSTATES  94
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   266
@@ -528,10 +528,9 @@ static const yytype_int16 yyrline[] =
 {
        0,    37,    37,    42,    45,    46,    59,    72,    85,    98,
      107,   116,   129,   144,   145,   149,   158,   165,   172,   179,
-     186,   199,   212,   219,   228,   239,   250,   255,   260,   265,
-     272,   276,   280,   285,   290,   295,   299,   303,   310,   321,
-     332,   337,   348,   359,   364,   369,   374,   379,   384,   389,
-     394,   399,   404
+     186,   199,   212,   219,   228,   240,   252,   257,   262,   267,
+     274,   278,   282,   287,   292,   297,   301,   305,   312,   331,
+     350,   355,   360,   365,   370,   375,   380,   385,   390,   395
 };
 #endif
 
@@ -572,17 +571,16 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -22,    37,   -22,   -22,   -21,    -9,     2,   138,   135,   -12,
-     148,   -22,   148,   -22,   269,    -4,    35,    86,   125,   125,
-       0,   -22,   -22,    68,    12,   -22,    47,    12,    81,    80,
-      13,    48,   148,   148,   148,   148,   148,   148,   -22,    -2,
-      92,   -22,    20,   -22,    28,   -22,    31,   279,   -22,   -22,
-     279,   -22,   -22,   -22,   149,   -22,    43,   -22,    46,    50,
-     -22,   162,   -22,   105,   105,    -5,    -5,    13,    13,   -22,
-     -22,   175,   -22,   -22,   -22,   -22,   148,   -22,   103,   106,
-     -22,   148,   -22,   148,   214,   -22,   188,   -22,   201,   225,
-     236,   -22,   -22,   148,   -22,   148,   -22,   -22,   247,   258,
-     -22,   -22
+     -22,    37,   -22,   -22,   -21,    -9,     2,   123,   120,   -12,
+     133,   -22,   133,   -22,   241,    -4,    35,    71,   110,   110,
+       0,   -22,   -22,    61,    12,   -22,    47,    12,    11,    66,
+      13,   186,   133,   133,   133,   133,   133,   133,   -22,    20,
+      80,   -22,    28,   -22,    31,   -22,    44,   251,   -22,   -22,
+     251,   -22,   -22,   -22,   134,   -22,    52,   -22,    55,   -22,
+     147,   -22,    46,    46,    -5,    -5,    13,    13,   -22,   -22,
+     160,   -22,   -22,   -22,   -22,   133,   -22,    91,   -22,   133,
+     -22,   133,   197,   -22,   173,   208,   219,   -22,   -22,   133,
+     -22,   -22,   230,   -22
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -595,18 +593,17 @@ static const yytype_int8 yydefact[] =
        0,    14,    15,     0,    32,    35,     0,    37,     0,     0,
       16,     0,     0,     0,     0,     0,     0,     0,     5,     0,
        0,     7,     0,     9,     0,    11,     0,    27,    29,    28,
-      24,    26,    25,    52,     0,    31,     0,    34,     0,     0,
-      49,     0,    23,    18,    17,    19,    20,    21,    22,     6,
-      46,     0,     8,    10,    12,    50,     0,    36,     0,     0,
-      47,     0,    44,     0,     0,    43,     0,    40,     0,     0,
-       0,    51,    41,     0,    38,     0,    48,    45,     0,     0,
-      42,    39
+      24,    26,    25,    49,     0,    31,     0,    34,     0,    46,
+       0,    23,    18,    17,    19,    20,    21,    22,     6,    43,
+       0,     8,    10,    12,    47,     0,    36,     0,    44,     0,
+      41,     0,     0,    40,     0,     0,     0,    48,    38,     0,
+      45,    42,     0,    39
 };
 
   /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int16 yypgoto[] =
+static const yytype_int8 yypgoto[] =
 {
-     -22,   -22,   -22,    -1,   -22,    97,   129
+     -22,   -22,   -22,    -1,   -22,    74,    79
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -621,69 +618,65 @@ static const yytype_int8 yydefgoto[] =
 static const yytype_int8 yytable[] =
 {
       14,    18,    28,     3,    21,    22,    24,    27,    29,    30,
-      36,    10,    37,    19,    41,    42,    69,    47,    50,    54,
-      12,    53,    20,    32,    33,    34,    35,    36,    61,    37,
-      37,    63,    64,    65,    66,    67,    68,     2,    72,    71,
-       3,     4,     5,     6,     7,     8,    73,     9,    10,    74,
-       3,    21,    22,    43,    44,    11,    56,    12,    10,    32,
-      33,    34,    35,    36,    77,    37,    78,    12,    57,    62,
-      79,     3,    21,    22,     0,    84,     0,    86,    88,    10,
-      89,     0,    90,     3,    21,    22,    58,    59,    12,    55,
-       0,    10,    98,     0,    99,     3,    21,    22,     0,     0,
-      12,    60,     0,    10,    45,    46,     3,    21,    22,     3,
-      21,    22,    12,    70,    10,    48,    51,    10,    34,    35,
-      36,     0,    37,    12,    85,     0,    12,    87,     3,    21,
-      22,     6,     7,     8,     0,     9,    10,     0,     3,    21,
-      22,     3,    21,    22,    25,    12,    10,    49,    52,    10,
-       0,     3,    21,    22,     0,    26,     0,     0,    23,    10,
-      32,    33,    34,    35,    36,     0,    37,     0,    12,     0,
-      75,     0,    76,    32,    33,    34,    35,    36,     0,    37,
-       0,     0,     0,    80,     0,    81,    32,    33,    34,    35,
-      36,     0,    37,     0,     0,     0,    82,     0,    83,    32,
-      33,    34,    35,    36,     0,    37,     0,     0,     0,    92,
-       0,    93,    32,    33,    34,    35,    36,     0,    37,     0,
-       0,     0,    94,     0,    95,    32,    33,    34,    35,    36,
-       0,    37,     0,     0,     0,    91,    32,    33,    34,    35,
-      36,     0,    37,     0,     0,     0,    96,    32,    33,    34,
-      35,    36,     0,    37,     0,     0,     0,    97,    32,    33,
-      34,    35,    36,     0,    37,     0,     0,     0,   100,    32,
-      33,    34,    35,    36,     0,    37,     0,     0,     0,   101,
-      32,    33,    34,    35,    36,     0,    37,    38,    39,    40,
-      32,    33,    34,    35,    36,     0,    37,     0,     0,    40
+      36,    10,    37,    19,    41,    42,    58,    47,    50,    54,
+      12,    53,    20,    32,    33,    34,    35,    36,    60,    37,
+      37,    62,    63,    64,    65,    66,    67,     2,    68,    70,
+       3,     4,     5,     6,     7,     8,    71,     9,    10,    72,
+       3,    21,    22,    43,    44,    11,    56,    12,    10,    34,
+      35,    36,    73,    37,     3,    21,    22,    12,    57,     3,
+      21,    22,    10,    76,    82,    77,    84,    10,    85,     0,
+      86,    12,    55,     3,    21,    22,    12,    59,    92,    45,
+      46,    10,    48,    51,     3,    21,    22,    49,    52,     0,
+      12,    69,    10,     0,     0,     0,     0,     0,     0,     0,
+       0,    12,    83,     3,    21,    22,     6,     7,     8,     0,
+       9,    10,     0,     3,    21,    22,     3,    21,    22,    25,
+      12,    10,     0,     0,    10,     0,     3,    21,    22,     0,
+      26,     0,     0,    23,    10,    32,    33,    34,    35,    36,
+       0,    37,     0,    12,     0,    74,     0,    75,    32,    33,
+      34,    35,    36,     0,    37,     0,     0,     0,    78,     0,
+      79,    32,    33,    34,    35,    36,     0,    37,     0,     0,
+       0,    80,     0,    81,    32,    33,    34,    35,    36,     0,
+      37,     0,     0,     0,    88,     0,    89,    32,    33,    34,
+      35,    36,     0,    37,     0,     0,     0,    61,    32,    33,
+      34,    35,    36,     0,    37,     0,     0,     0,    87,    32,
+      33,    34,    35,    36,     0,    37,     0,     0,     0,    90,
+      32,    33,    34,    35,    36,     0,    37,     0,     0,     0,
+      91,    32,    33,    34,    35,    36,     0,    37,     0,     0,
+       0,    93,    32,    33,    34,    35,    36,     0,    37,    38,
+      39,    40,    32,    33,    34,    35,    36,     0,    37,     0,
+       0,    40
 };
 
 static const yytype_int8 yycheck[] =
 {
        1,    22,    14,     3,     4,     5,     7,     8,    20,    10,
-      15,    11,    17,    22,    18,    19,    18,    18,    19,    20,
+      15,    11,    17,    22,    18,    19,     5,    18,    19,    20,
       20,    21,    20,    11,    12,    13,    14,    15,    29,    17,
       17,    32,    33,    34,    35,    36,    37,     0,    18,    40,
        3,     4,     5,     6,     7,     8,    18,    10,    11,    18,
-       3,     4,     5,    18,    19,    18,     9,    20,    11,    11,
-      12,    13,    14,    15,    21,    17,    20,    20,    21,    21,
-      20,     3,     4,     5,    -1,    76,    -1,    78,    79,    11,
-      81,    -1,    83,     3,     4,     5,     5,     6,    20,    21,
-      -1,    11,    93,    -1,    95,     3,     4,     5,    -1,    -1,
-      20,    21,    -1,    11,    18,    19,     3,     4,     5,     3,
-       4,     5,    20,    21,    11,    18,    19,    11,    13,    14,
-      15,    -1,    17,    20,    21,    -1,    20,    21,     3,     4,
-       5,     6,     7,     8,    -1,    10,    11,    -1,     3,     4,
-       5,     3,     4,     5,     9,    20,    11,    18,    19,    11,
-      -1,     3,     4,     5,    -1,    20,    -1,    -1,    20,    11,
-      11,    12,    13,    14,    15,    -1,    17,    -1,    20,    -1,
-      21,    -1,    23,    11,    12,    13,    14,    15,    -1,    17,
-      -1,    -1,    -1,    21,    -1,    23,    11,    12,    13,    14,
-      15,    -1,    17,    -1,    -1,    -1,    21,    -1,    23,    11,
-      12,    13,    14,    15,    -1,    17,    -1,    -1,    -1,    21,
-      -1,    23,    11,    12,    13,    14,    15,    -1,    17,    -1,
-      -1,    -1,    21,    -1,    23,    11,    12,    13,    14,    15,
-      -1,    17,    -1,    -1,    -1,    21,    11,    12,    13,    14,
-      15,    -1,    17,    -1,    -1,    -1,    21,    11,    12,    13,
+       3,     4,     5,    18,    19,    18,     9,    20,    11,    13,
+      14,    15,    18,    17,     3,     4,     5,    20,    21,     3,
+       4,     5,    11,    21,    75,    20,    77,    11,    79,    -1,
+      81,    20,    21,     3,     4,     5,    20,    21,    89,    18,
+      19,    11,    18,    19,     3,     4,     5,    18,    19,    -1,
+      20,    21,    11,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    20,    21,     3,     4,     5,     6,     7,     8,    -1,
+      10,    11,    -1,     3,     4,     5,     3,     4,     5,     9,
+      20,    11,    -1,    -1,    11,    -1,     3,     4,     5,    -1,
+      20,    -1,    -1,    20,    11,    11,    12,    13,    14,    15,
+      -1,    17,    -1,    20,    -1,    21,    -1,    23,    11,    12,
+      13,    14,    15,    -1,    17,    -1,    -1,    -1,    21,    -1,
+      23,    11,    12,    13,    14,    15,    -1,    17,    -1,    -1,
+      -1,    21,    -1,    23,    11,    12,    13,    14,    15,    -1,
+      17,    -1,    -1,    -1,    21,    -1,    23,    11,    12,    13,
       14,    15,    -1,    17,    -1,    -1,    -1,    21,    11,    12,
       13,    14,    15,    -1,    17,    -1,    -1,    -1,    21,    11,
       12,    13,    14,    15,    -1,    17,    -1,    -1,    -1,    21,
-      11,    12,    13,    14,    15,    -1,    17,    18,    19,    20,
-      11,    12,    13,    14,    15,    -1,    17,    -1,    -1,    20
+      11,    12,    13,    14,    15,    -1,    17,    -1,    -1,    -1,
+      21,    11,    12,    13,    14,    15,    -1,    17,    -1,    -1,
+      -1,    21,    11,    12,    13,    14,    15,    -1,    17,    18,
+      19,    20,    11,    12,    13,    14,    15,    -1,    17,    -1,
+      -1,    20
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -695,12 +688,11 @@ static const yytype_int8 yystos[] =
       20,     4,     5,    20,    27,     9,    20,    27,    14,    20,
       27,    27,    11,    12,    13,    14,    15,    17,    18,    19,
       20,    18,    19,    18,    19,    18,    19,    27,    29,    30,
-      27,    29,    30,    21,    27,    21,     9,    21,     5,     6,
-      21,    27,    21,    27,    27,    27,    27,    27,    27,    18,
-      21,    27,    18,    18,    18,    21,    23,    21,    20,    20,
-      21,    23,    21,    23,    27,    21,    27,    21,    27,    27,
-      27,    21,    21,    23,    21,    23,    21,    21,    27,    27,
-      21,    21
+      27,    29,    30,    21,    27,    21,     9,    21,     5,    21,
+      27,    21,    27,    27,    27,    27,    27,    27,    18,    21,
+      27,    18,    18,    18,    21,    23,    21,    20,    21,    23,
+      21,    23,    27,    21,    27,    27,    27,    21,    21,    23,
+      21,    21,    27,    21
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -710,8 +702,7 @@ static const yytype_int8 yyr1[] =
       26,    26,    26,    27,    27,    27,    27,    27,    27,    27,
       27,    27,    27,    27,    28,    28,    28,    28,    28,    28,
       29,    29,    29,    29,    29,    29,    29,    29,    30,    30,
-      30,    30,    30,    30,    30,    30,    30,    30,    30,    30,
-      30,    30,    30
+      30,    30,    30,    30,    30,    30,    30,    30,    30,    30
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -721,8 +712,7 @@ static const yytype_int8 yyr2[] =
        3,     2,     3,     1,     1,     1,     2,     3,     3,     3,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
        1,     3,     2,     1,     3,     2,     4,     2,     6,     8,
-       5,     6,     8,     5,     4,     6,     3,     4,     6,     3,
-       4,     6,     3
+       5,     4,     6,     3,     4,     6,     3,     4,     6,     3
 };
 
 
@@ -1424,13 +1414,13 @@ yyreduce:
                                 printf(CYAN">"RESET" ");
                             }
                         }
-#line 1428 "bison.tab.c"
+#line 1418 "bison.tab.c"
     break;
 
   case 4:
 #line 45 "bison.y"
                         { printf(CYAN">"RESET" "); }
-#line 1434 "bison.tab.c"
+#line 1424 "bison.tab.c"
     break;
 
   case 5:
@@ -1448,7 +1438,7 @@ yyreduce:
                             }
                             erro = 0;
                         }
-#line 1452 "bison.tab.c"
+#line 1442 "bison.tab.c"
     break;
 
   case 6:
@@ -1466,7 +1456,7 @@ yyreduce:
                             }
                             erro = 0;
                         }
-#line 1470 "bison.tab.c"
+#line 1460 "bison.tab.c"
     break;
 
   case 7:
@@ -1484,7 +1474,7 @@ yyreduce:
                             }
                             erro = 0;
                         }
-#line 1488 "bison.tab.c"
+#line 1478 "bison.tab.c"
     break;
 
   case 8:
@@ -1502,7 +1492,7 @@ yyreduce:
                             }
                             erro = 0;
                         }
-#line 1506 "bison.tab.c"
+#line 1496 "bison.tab.c"
     break;
 
   case 9:
@@ -1516,7 +1506,7 @@ yyreduce:
                                 }
                                 erro = 0;
                             }
-#line 1520 "bison.tab.c"
+#line 1510 "bison.tab.c"
     break;
 
   case 10:
@@ -1530,7 +1520,7 @@ yyreduce:
                                 }
                                 erro = 0;
                             }
-#line 1534 "bison.tab.c"
+#line 1524 "bison.tab.c"
     break;
 
   case 11:
@@ -1548,7 +1538,7 @@ yyreduce:
                                 }
                                 erro = 0;
                             }
-#line 1552 "bison.tab.c"
+#line 1542 "bison.tab.c"
     break;
 
   case 12:
@@ -1566,7 +1556,7 @@ yyreduce:
                                 }
                                 erro = 0;
                             }
-#line 1570 "bison.tab.c"
+#line 1560 "bison.tab.c"
     break;
 
   case 14:
@@ -1575,7 +1565,7 @@ yyreduce:
                             comp = buscarLexema((yyvsp[0].cadea));
                             (yyval.numero) = comp.valor.var;
                         }
-#line 1579 "bison.tab.c"
+#line 1569 "bison.tab.c"
     break;
 
   case 15:
@@ -1589,7 +1579,7 @@ yyreduce:
                                 (yyval.numero) = NAN;
                             }
                         }
-#line 1593 "bison.tab.c"
+#line 1583 "bison.tab.c"
     break;
 
   case 16:
@@ -1601,7 +1591,7 @@ yyreduce:
                                      (yyval.numero) = NAN;
                                  }
                             }
-#line 1605 "bison.tab.c"
+#line 1595 "bison.tab.c"
     break;
 
   case 17:
@@ -1613,7 +1603,7 @@ yyreduce:
                                 (yyval.numero) = NAN;
                             }
                         }
-#line 1617 "bison.tab.c"
+#line 1607 "bison.tab.c"
     break;
 
   case 18:
@@ -1625,7 +1615,7 @@ yyreduce:
                                 (yyval.numero) = NAN;
                             }
                         }
-#line 1629 "bison.tab.c"
+#line 1619 "bison.tab.c"
     break;
 
   case 19:
@@ -1637,7 +1627,7 @@ yyreduce:
                                 (yyval.numero) = NAN;
                             }
                         }
-#line 1641 "bison.tab.c"
+#line 1631 "bison.tab.c"
     break;
 
   case 20:
@@ -1655,7 +1645,7 @@ yyreduce:
                                 }
                             }
                         }
-#line 1659 "bison.tab.c"
+#line 1649 "bison.tab.c"
     break;
 
   case 21:
@@ -1673,7 +1663,7 @@ yyreduce:
                                 }
                             }
                         }
-#line 1677 "bison.tab.c"
+#line 1667 "bison.tab.c"
     break;
 
   case 22:
@@ -1685,7 +1675,7 @@ yyreduce:
                                 (yyval.numero) = NAN;
                             }
                         }
-#line 1689 "bison.tab.c"
+#line 1679 "bison.tab.c"
     break;
 
   case 23:
@@ -1697,7 +1687,7 @@ yyreduce:
                                  (yyval.numero) = NAN;
                              }
                          }
-#line 1701 "bison.tab.c"
+#line 1691 "bison.tab.c"
     break;
 
   case 24:
@@ -1710,14 +1700,15 @@ yyreduce:
                                comp.comp_lexico = VAR;
                                comp.valor.var = (yyvsp[0].numero);
                                insertar(comp);
+                               free(comp.lexema);
                            }
                            (yyval.numero) = (yyvsp[0].numero);
                         }
-#line 1717 "bison.tab.c"
+#line 1708 "bison.tab.c"
     break;
 
   case 25:
-#line 239 "bison.y"
+#line 240 "bison.y"
                         {
                            if ((comp = buscarLexema((yyvsp[-2].cadea))).lexema != NULL) {
                                modificarValorVariable((yyvsp[-2].cadea), (yyvsp[0].numero));
@@ -1726,133 +1717,141 @@ yyreduce:
                                comp.comp_lexico = VAR;
                                comp.valor.var = (yyvsp[0].numero);
                                insertar(comp);
+                               free(comp.lexema);
                            }
                            (yyval.numero) = (yyvsp[0].numero);
                         }
-#line 1733 "bison.tab.c"
+#line 1725 "bison.tab.c"
     break;
 
   case 26:
-#line 250 "bison.y"
+#line 252 "bison.y"
                         {
                             lanzarErro(SINTAXE_NON_VALIDA);
                             erro = 1;
                             (yyval.numero) = NAN;
                         }
-#line 1743 "bison.tab.c"
+#line 1735 "bison.tab.c"
     break;
 
   case 27:
-#line 255 "bison.y"
+#line 257 "bison.y"
                         {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             (yyval.numero) = NAN;
                         }
-#line 1753 "bison.tab.c"
+#line 1745 "bison.tab.c"
     break;
 
   case 28:
-#line 260 "bison.y"
+#line 262 "bison.y"
                         {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             (yyval.numero) = NAN;
                         }
-#line 1763 "bison.tab.c"
+#line 1755 "bison.tab.c"
     break;
 
   case 29:
-#line 265 "bison.y"
+#line 267 "bison.y"
                          {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             (yyval.numero) = NAN;
                         }
-#line 1773 "bison.tab.c"
+#line 1765 "bison.tab.c"
     break;
 
   case 30:
-#line 272 "bison.y"
+#line 274 "bison.y"
                                     {
                                         comp = buscarLexema((yyvsp[0].cadea));
                                         (*(comp.valor.funcptr))();
                                     }
-#line 1782 "bison.tab.c"
+#line 1774 "bison.tab.c"
     break;
 
   case 31:
-#line 276 "bison.y"
+#line 278 "bison.y"
                                     {
                                         comp = buscarLexema((yyvsp[-2].cadea));
                                         (*(comp.valor.funcptr))();
                                     }
-#line 1791 "bison.tab.c"
+#line 1783 "bison.tab.c"
     break;
 
   case 32:
-#line 280 "bison.y"
+#line 282 "bison.y"
                                     {
                                         lanzarErro(SINTAXE_NON_VALIDA);
                                         erro = 1;
                                         (yyval.numero) = NAN;
                                     }
-#line 1801 "bison.tab.c"
+#line 1793 "bison.tab.c"
     break;
 
   case 33:
-#line 285 "bison.y"
+#line 287 "bison.y"
                                     {
                                         lanzarErro(FICHEIRO_NON_INDICADO);
                                         erro = 1;
                                         (yyval.numero) = NAN;
                                     }
-#line 1811 "bison.tab.c"
+#line 1803 "bison.tab.c"
     break;
 
   case 34:
-#line 290 "bison.y"
+#line 292 "bison.y"
                                     {
                                         lanzarErro(FICHEIRO_NON_INDICADO);
                                         erro = 1;
                                         (yyval.numero) = NAN;
                                     }
-#line 1821 "bison.tab.c"
+#line 1813 "bison.tab.c"
     break;
 
   case 35:
-#line 295 "bison.y"
+#line 297 "bison.y"
                                     {
                                         comp = buscarLexema((yyvsp[-1].cadea));
                                         (*(comp.valor.funcptr))((yyvsp[0].cadea));
                                     }
-#line 1830 "bison.tab.c"
+#line 1822 "bison.tab.c"
     break;
 
   case 36:
-#line 299 "bison.y"
+#line 301 "bison.y"
                                     {
                                         comp = buscarLexema((yyvsp[-3].cadea));
                                         (*(comp.valor.funcptr))((yyvsp[-1].cadea));
                                     }
-#line 1839 "bison.tab.c"
+#line 1831 "bison.tab.c"
     break;
 
   case 37:
-#line 303 "bison.y"
+#line 305 "bison.y"
                                     {
                                         lanzarErro(FICHEIRO_MAL_FORMATO);
                                         erro = 1;
                                         (yyval.numero) = NAN;
                                     }
-#line 1849 "bison.tab.c"
+#line 1841 "bison.tab.c"
     break;
 
   case 38:
-#line 310 "bison.y"
+#line 312 "bison.y"
                                             {
                                                 comp = buscarLexema((yyvsp[-5].cadea));
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-3].cadea));
+
+                                                char *libfunc = malloc(((strlen((yyvsp[-5].cadea)) + strlen((yyvsp[-3].cadea)) + 2) * sizeof(char)));
+                                                strncpy(libfunc, (yyvsp[-5].cadea), strlen((yyvsp[-5].cadea)));
+                                                strncpy(libfunc + strlen((yyvsp[-5].cadea)), "/", 2);
+                                                strncpy(libfunc + strlen((yyvsp[-5].cadea)) + 1, (yyvsp[-3].cadea), strlen((yyvsp[-3].cadea)));
+                                                libfunc[strlen((yyvsp[-5].cadea)) + strlen((yyvsp[-3].cadea)) + 1] = '\0';
+
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-3].cadea), libfunc);
                                                 if (comp_func.lexema != NULL) {
                                                     (yyval.numero) = (*(comp_func.valor.funcptr))((yyvsp[-1].numero));
                                                 } else {
@@ -1860,15 +1859,23 @@ yyreduce:
                                                     erro = 1;
                                                     (yyval.numero) = NAN;
                                                 }
+                                                free(libfunc);
                                             }
 #line 1865 "bison.tab.c"
     break;
 
   case 39:
-#line 321 "bison.y"
+#line 331 "bison.y"
                                             {
                                                 comp = buscarLexema((yyvsp[-7].cadea));
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-5].cadea));
+
+                                                char *libfunc = malloc(((strlen((yyvsp[-7].cadea)) + strlen((yyvsp[-5].cadea)) + 2) * sizeof(char)));
+                                                strncpy(libfunc, (yyvsp[-7].cadea), strlen((yyvsp[-7].cadea)));
+                                                strncpy(libfunc + strlen((yyvsp[-7].cadea)), "/", 2);
+                                                strncpy(libfunc + strlen((yyvsp[-7].cadea)) + 1, (yyvsp[-5].cadea), strlen((yyvsp[-5].cadea)));
+                                                libfunc[strlen((yyvsp[-7].cadea)) + strlen((yyvsp[-5].cadea)) + 1] = '\0';
+
+                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-5].cadea), libfunc);
                                                 if (comp_func.lexema != NULL) {
                                                     (yyval.numero) = (*(comp_func.valor.funcptr))((yyvsp[-3].numero), (yyvsp[-1].numero));
                                                 } else {
@@ -1876,154 +1883,113 @@ yyreduce:
                                                     erro = 1;
                                                     (yyval.numero) = NAN;
                                                 }
+                                                free(libfunc);
                                             }
-#line 1881 "bison.tab.c"
+#line 1889 "bison.tab.c"
     break;
 
   case 40:
-#line 332 "bison.y"
+#line 350 "bison.y"
                                             {
                                                 lanzarErro(PARAMETROS_NON_INDICADOS);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1891 "bison.tab.c"
+#line 1899 "bison.tab.c"
     break;
 
   case 41:
-#line 337 "bison.y"
+#line 355 "bison.y"
                                             {
-                                                comp = buscarLexema((yyvsp[-5].cadea));
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-3].cadea));
-                                                if (comp_func.lexema != NULL) {
-                                                    (yyval.numero) = (*(comp_func.valor.funcptr))((yyvsp[-1].numero));
-                                                } else {
-                                                    lanzarErro(FUNCION_NON_ATOPADA);
-                                                    erro = 1;
-                                                    (yyval.numero) = NAN;
-                                                }
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                erro = 1;
+                                                (yyval.numero) = NAN;
                                             }
-#line 1907 "bison.tab.c"
+#line 1909 "bison.tab.c"
     break;
 
   case 42:
-#line 348 "bison.y"
+#line 360 "bison.y"
                                             {
-                                                comp = buscarLexema((yyvsp[-7].cadea));
-                                                CompLexico comp_func = buscarFuncion(comp.valor.libhandle, (yyvsp[-5].cadea));
-                                                if (comp_func.lexema != NULL) {
-                                                    (yyval.numero) = (*(comp_func.valor.funcptr))((yyvsp[-3].numero), (yyvsp[-1].numero));
-                                                } else {
-                                                    lanzarErro(FUNCION_NON_ATOPADA);
-                                                    erro = 1;
-                                                    (yyval.numero) = NAN;
-                                                }
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                erro = 1;
+                                                (yyval.numero) = NAN;
                                             }
-#line 1923 "bison.tab.c"
+#line 1919 "bison.tab.c"
     break;
 
   case 43:
-#line 359 "bison.y"
+#line 365 "bison.y"
                                             {
-                                                lanzarErro(PARAMETROS_NON_INDICADOS);
+                                                lanzarErro(LIBRERIA_NON_ATOPADA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1933 "bison.tab.c"
+#line 1929 "bison.tab.c"
     break;
 
   case 44:
-#line 364 "bison.y"
+#line 370 "bison.y"
                                             {
-                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1943 "bison.tab.c"
+#line 1939 "bison.tab.c"
     break;
 
   case 45:
-#line 369 "bison.y"
+#line 375 "bison.y"
                                             {
-                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1953 "bison.tab.c"
+#line 1949 "bison.tab.c"
     break;
 
   case 46:
-#line 374 "bison.y"
+#line 380 "bison.y"
                                             {
-                                                lanzarErro(LIBRERIA_NON_ATOPADA);
+                                                lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1963 "bison.tab.c"
+#line 1959 "bison.tab.c"
     break;
 
   case 47:
-#line 379 "bison.y"
+#line 385 "bison.y"
                                             {
                                                 lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1973 "bison.tab.c"
+#line 1969 "bison.tab.c"
     break;
 
   case 48:
-#line 384 "bison.y"
+#line 390 "bison.y"
                                             {
                                                 lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
-#line 1983 "bison.tab.c"
+#line 1979 "bison.tab.c"
     break;
 
   case 49:
-#line 389 "bison.y"
+#line 395 "bison.y"
                                             {
                                                 lanzarErro(SINTAXE_NON_VALIDA);
                                                 erro = 1;
                                                 (yyval.numero) = NAN;
                                             }
+#line 1989 "bison.tab.c"
+    break;
+
+
 #line 1993 "bison.tab.c"
-    break;
-
-  case 50:
-#line 394 "bison.y"
-                                            {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                (yyval.numero) = NAN;
-                                            }
-#line 2003 "bison.tab.c"
-    break;
-
-  case 51:
-#line 399 "bison.y"
-                                            {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                (yyval.numero) = NAN;
-                                            }
-#line 2013 "bison.tab.c"
-    break;
-
-  case 52:
-#line 404 "bison.y"
-                                            {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                (yyval.numero) = NAN;
-                                            }
-#line 2023 "bison.tab.c"
-    break;
-
-
-#line 2027 "bison.tab.c"
 
       default: break;
     }
@@ -2255,7 +2221,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 410 "bison.y"
+#line 401 "bison.y"
 
 void yyerror(char *s) {
     printf("Erro na análise sintáctica: %s\n", s);
@@ -2273,6 +2239,6 @@ void cambiarEcho(int valor) {
 void executandoScript(int valor) {
     script = valor;
     if (!script) {
-        printf("\n"VERDE"Script executado correctamente."RESET"\n\n"CYAN">"RESET" ");
+        printf("\n"AMARILLO"Script executado correctamente."RESET"\n\n"CYAN">"RESET" ");
     }
 }

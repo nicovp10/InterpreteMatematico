@@ -19,7 +19,7 @@ double clear() {
 }
 
 double sair() {
-    printf("    Saíndo do programa...\n\n");
+    printf(AMARILLO"Saíndo do programa..."RESET"\n\n");
     finalizarTS();
     exit(EXIT_SUCCESS);
 }
@@ -44,13 +44,14 @@ double taboa() {
     return 0;
 }
 
-double workspace() {
+double ws() {
     imprimirWS();
     return 0;
 }
 
 double limparws() {
     eliminarWS();
+    printf(AMARILLO"Espazo de traballo limpado correctamente.\n\n"RESET);
     return 0;
 }
 
@@ -69,13 +70,23 @@ double cargar(char *ficheiro) {
 
 double importar(char *libreria) {
     void *lib = dlopen(libreria, RTLD_LAZY);
-
+    char *nome_lib = NULL, *lexema;
     if (lib == NULL) {
         printf(ROJO"Erro: apertura de librería fallida.\n\tDetalles: %s"RESET"\n\n", dlerror());
     } else {
-        char *lexema = strtok(libreria, ".");
+        for (int i = ((int) (strlen(libreria) - 1)); i >= 0; i--) {
+            if (libreria[i] == '/') {
+                nome_lib = &libreria[i + 1];
+                break;
+            }
+        }
+        if (nome_lib == NULL) {
+            nome_lib = libreria;
+        }
+        lexema = strtok(nome_lib, ".");
         CompLexico comp_lib = {LIB, lexema, .valor.libhandle=lib};
         insertar(comp_lib);
+        printf(AMARILLO"Librería cargada correctamente.\n\n"RESET);
     }
 
     return 0;
