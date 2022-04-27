@@ -19,7 +19,7 @@ typedef struct {
 } CompLexico;
 
 
-// Función que invoca ao intérprete de expresións de cálculo matemático
+// Función que invoca ao intérprete matemático
 void nicalc(char *arg);
 
 
