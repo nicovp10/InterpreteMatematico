@@ -24,6 +24,5 @@ void nicalc(char *arg) {
         }
     }
 
-
     yyparse();
 }
