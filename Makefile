@@ -55,7 +55,7 @@ bison:
 
 # REGRA 5: xera un arquivo comprimido ZIP a partir do código fonte
 zip:
-	zip $(ZIP_FILE) Makefile README.md $(SRCS) $(LIB_HEADERS) $(FLEX_FILE) $(BISON_FILE)
+	zip $(ZIP_FILE) Makefile README.md bison.tab_copia.h $(SRCS) $(LIB_HEADERS) $(FLEX_FILE) $(BISON_FILE)
 
 # REGRA 6: borra o executable e o zip
 clean:
