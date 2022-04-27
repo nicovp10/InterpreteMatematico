@@ -101,9 +101,7 @@ void iniciarTS() {
 
 // Función que busca un lexema concreto na táboa de símbolos.
 //  Se o lexema está na táboa, devolve o seu compoñente léxico.
-//  Se o lexema non está na táboa, búscase se está nunha librería e,
-//      de ser así, insértase na táboa de símbolos.
-//  Se o lexema non está na táboa nin nunha librería, devolve NULL.
+//  Se o lexema non está na táboa, devolve NULL.
 CompLexico buscarLexema(char *lexema) {
     tipoelem comp_busqueda = {0, NULL};
     buscar_nodo(TS, lexema, &comp_busqueda);
@@ -112,9 +110,9 @@ CompLexico buscarLexema(char *lexema) {
 
 // Función que busca unha función concreta na táboa de símbolos.
 //  Se a función está na táboa, devolve o seu compoñente léxico.
-//  Se o lexema non está na táboa, búscase se está na librería
+//  Se a función non está na táboa, búscase se está na librería
 //      indicada e, de ser así, insértase na táboa de símbolos.
-//  Se o lexema non está na táboa nin na librería, devolve NULL.
+//  Se a función non está na táboa nin na librería, devolve NULL.
 CompLexico buscarFuncion(void *lib, char *lexema_funcion, char *libfunc) {
     tipoelem comp_busqueda = {0, NULL};
     buscar_nodo(TS, lexema_funcion, &comp_busqueda);
