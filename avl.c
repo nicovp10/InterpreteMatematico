@@ -325,12 +325,11 @@ void insertar_nodo(avl *A, tipoelem E) {
         strcpy((*A)->info.lexema, E.lexema);
         (*A)->info.valor = E.valor;
         (*A)->fe = 0;
-        (*A)->pai = NULL;
         (*A)->pai = NULL; // O pai inicialízase a NULL e especificarase cando se desapile esta chamada á función
         (*A)->izq = NULL;
         (*A)->der = NULL;
         (*A)->fe = 0; // Ao ser un nodo folla, o FE deste será 0
-        equilibrar_insercion = 1; // Ao insertarse un nodo actívase o propagación para equilibrar_insercion os FE
+        equilibrar_insercion = 1; // Ao insertarse un nodo actívase o propagación para equilibrar os FE na inserción
         return;
     }
 

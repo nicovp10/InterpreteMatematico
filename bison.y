@@ -43,32 +43,32 @@ entrada: %empty         {
 ;
 
 linea:   '\n'           { printf(CYAN">"RESET" "); }
-        | exp '\n'      {
-                            if (!erro) {
-                                if (isnan($1)) {
-                                    lanzarErro(NAN_DETECTADO);
-                                } else if (facerEcho) {
-                                    printf(VERDE"%lf"RESET"\n\n", $1);
+        | exp '\n'              {
+                                    if (!erro) {
+                                        if (isnan($1)) {
+                                            lanzarErro(NAN_DETECTADO);
+                                        } else if (facerEcho) {
+                                            printf(VERDE"%lf"RESET"\n\n", $1);
+                                        }
+                                    }
+                                    if (!script) {
+                                        printf(CYAN">"RESET" ");
+                                    }
+                                    erro = 0;
                                 }
-                            }
-                            if (!script) {
-                                printf(CYAN">"RESET" ");
-                            }
-                            erro = 0;
-                        }
-        | exp ';' '\n'  {
-                            if (!erro) {
-                                if (isnan($1)) {
-                                    lanzarErro(NAN_DETECTADO);
-                                } else if (facerEcho) {
-                                    printf(VERDE"%lf"RESET"\n\n", $1);
+        | exp ';' '\n'          {
+                                    if (!erro) {
+                                        if (isnan($1)) {
+                                            lanzarErro(NAN_DETECTADO);
+                                        } else if (facerEcho) {
+                                            printf(VERDE"%lf"RESET"\n\n", $1);
+                                        }
+                                    }
+                                    if (!script) {
+                                        printf(CYAN">"RESET" ");
+                                    }
+                                    erro = 0;
                                 }
-                            }
-                            if (!script) {
-                                printf(CYAN">"RESET" ");
-                            }
-                            erro = 0;
-                        }
         | asig '\n'     {
                             if (!erro) {
                                 if (isnan($1)) {
@@ -82,19 +82,19 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                             }
                             erro = 0;
                         }
-        | asig ';' '\n' {
-                            if (!erro) {
-                                if (isnan($1)) {
-                                    lanzarErro(NAN_DETECTADO);
-                                } else if (facerEcho) {
-                                    printf(VERDE"%lf"RESET"\n\n", $1);
+        | asig ';' '\n'         {
+                                    if (!erro) {
+                                        if (isnan($1)) {
+                                            lanzarErro(NAN_DETECTADO);
+                                        } else if (facerEcho) {
+                                            printf(VERDE"%lf"RESET"\n\n", $1);
+                                        }
+                                    }
+                                    if (!script) {
+                                        printf(CYAN">"RESET" ");
+                                    }
+                                    erro = 0;
                                 }
-                            }
-                            if (!script) {
-                                printf(CYAN">"RESET" ");
-                            }
-                            erro = 0;
-                        }
         | cmnd '\n'         {
                                 if (isnan($1) && !erro) {
                                     lanzarErro(NAN_DETECTADO);
@@ -104,15 +104,15 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                                 }
                                 erro = 0;
                             }
-        | cmnd ';' '\n'     {
-                                if (isnan($1) && !erro) {
-                                    lanzarErro(NAN_DETECTADO);
+        | cmnd ';' '\n'         {
+                                    if (isnan($1) && !erro) {
+                                        lanzarErro(NAN_DETECTADO);
+                                    }
+                                    if (!script) {
+                                        printf(CYAN">"RESET" ");
+                                    }
+                                    erro = 0;
                                 }
-                                if (!script) {
-                                    printf(CYAN">"RESET" ");
-                                }
-                                erro = 0;
-                            }
         | fnc '\n'          {
                                 if (!erro) {
                                     if (isnan($1)) {
@@ -126,25 +126,27 @@ linea:   '\n'           { printf(CYAN">"RESET" "); }
                                 }
                                 erro = 0;
                             }
-        | fnc ';' '\n'      {
-                                if (!erro) {
-                                    if (isnan($1)) {
-                                        lanzarErro(NAN_DETECTADO);
-                                    } else if (facerEcho) {
-                                        printf(VERDE"%lf"RESET"\n\n", $1);
+        | fnc ';' '\n'       {
+                                    if (!erro) {
+                                        if (isnan($1)) {
+                                            lanzarErro(NAN_DETECTADO);
+                                        } else if (facerEcho) {
+                                            printf(VERDE"%lf"RESET"\n\n", $1);
+                                        }
                                     }
+                                    if (!script) {
+                                        printf(CYAN">"RESET" ");
+                                    }
+                                    erro = 0;
                                 }
-                                if (!script) {
-                                    printf(CYAN">"RESET" ");
-                                }
-                                erro = 0;
-                            }
+
 ;
 
 exp:    NUM
         | CONST         {
                             comp = buscarLexema($1);
                             $$ = comp.valor.var;
+                            free($1);
                         }
         | VAR           {
                             if ((comp = buscarLexema($1)).lexema != NULL) {
@@ -154,6 +156,7 @@ exp:    NUM
                                 erro = 1;
                                 $$ = NAN;
                             }
+                            free($1);
                         }
         | '-' exp %prec NEG {
                                  if (!isnan($2)) {
@@ -226,86 +229,88 @@ exp:    NUM
 ;
 
 asig:   VAR '=' exp     {
-                           if ((comp = buscarLexema($1)).lexema != NULL) {
-                               modificarValorVariable($1, $3);
-                           } else if (!erro) {
-                               comp.lexema = strdup($1);
-                               comp.comp_lexico = VAR;
-                               comp.valor.var = $3;
-                               insertar(comp);
-                               free(comp.lexema);
+                           if (!erro) {
+                               if ((comp = buscarLexema($1)).lexema != NULL) {
+                                   modificarValorVariable($1, $3);
+                               } else {
+                                   comp.lexema = strdup($1);
+                                   comp.comp_lexico = VAR;
+                                   comp.valor.var = $3;
+                                   insertar(comp);
+                                   free(comp.lexema);
+                               }
                            }
                            $$ = $3;
+                           free($1);
                         }
         | VAR '=' fnc   {
-                           if ((comp = buscarLexema($1)).lexema != NULL) {
-                               modificarValorVariable($1, $3);
-                           } else if (!erro) {
-                               comp.lexema = strdup($1);
-                               comp.comp_lexico = VAR;
-                               comp.valor.var = $3;
-                               insertar(comp);
-                               free(comp.lexema);
+                           if (!erro) {
+                               if ((comp = buscarLexema($1)).lexema != NULL) {
+                                   modificarValorVariable($1, $3);
+                               } else {
+                                   comp.lexema = strdup($1);
+                                   comp.comp_lexico = VAR;
+                                   comp.valor.var = $3;
+                                   insertar(comp);
+                                   free(comp.lexema);
+                               }
                            }
                            $$ = $3;
-                        }
-        | VAR '=' cmnd  {
-                            lanzarErro(SINTAXE_NON_VALIDA);
-                            erro = 1;
-                            $$ = NAN;
+                           free($1);
                         }
         | CONST '=' exp {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             $$ = NAN;
+                            free($1);
                         }
         | CONST '=' fnc {
                             lanzarErro(CONSTANTE_NON_MODIFICABLE);
                             erro = 1;
                             $$ = NAN;
-                        }
-        | CONST '=' cmnd {
-                            lanzarErro(CONSTANTE_NON_MODIFICABLE);
-                            erro = 1;
-                            $$ = NAN;
+                            free($1);
                         }
 ;
 
 cmnd:   CMND0                       {
                                         comp = buscarLexema($1);
+                                        free($1);
                                         (*(comp.valor.funcptr))();
                                     }
         | CMND0 '(' ')'             {
                                         comp = buscarLexema($1);
+                                        free($1);
                                         (*(comp.valor.funcptr))();
-                                    }
-        | CMND0 exp                 {
-                                        lanzarErro(SINTAXE_NON_VALIDA);
-                                        erro = 1;
-                                        $$ = NAN;
                                     }
         | CMND1                     {
                                         lanzarErro(FICHEIRO_NON_INDICADO);
                                         erro = 1;
                                         $$ = NAN;
+                                        free($1);
                                     }
         | CMND1 '(' ')'             {
                                         lanzarErro(FICHEIRO_NON_INDICADO);
                                         erro = 1;
                                         $$ = NAN;
+                                        free($1);
                                     }
         | CMND1 FICHEIRO            {
                                         comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))($2);
+                                        free($1);
+                                        free($2);
                                     }
         | CMND1 '(' FICHEIRO ')'    {
                                         comp = buscarLexema($1);
                                         (*(comp.valor.funcptr))($3);
+                                        free($1);
+                                        free($3);
                                     }
         | CMND1 exp                 {
                                         lanzarErro(FICHEIRO_MAL_FORMATO);
                                         erro = 1;
                                         $$ = NAN;
+                                        free($1);
                                     }
 ;
 
@@ -327,6 +332,8 @@ fnc:    LIB '/' VAR '(' exp ')'             {
                                                     $$ = NAN;
                                                 }
                                                 free(libfunc);
+                                                free($1);
+                                                free($3);
                                             }
         | LIB '/' VAR '(' exp ',' exp ')'   {
                                                 comp = buscarLexema($1);
@@ -346,11 +353,15 @@ fnc:    LIB '/' VAR '(' exp ')'             {
                                                     $$ = NAN;
                                                 }
                                                 free(libfunc);
+                                                free($1);
+                                                free($3);
                                             }
         | LIB '/' VAR '(' ')'               {
                                                 lanzarErro(PARAMETROS_NON_INDICADOS);
                                                 erro = 1;
                                                 $$ = NAN;
+                                                free($1);
+                                                free($3);
                                             }
         | exp '(' exp ')'                   {
                                                 lanzarErro(LIBRERIA_NON_ATOPADA);
@@ -367,40 +378,10 @@ fnc:    LIB '/' VAR '(' exp ')'             {
                                                 erro = 1;
                                                 $$ = NAN;
                                             }
-        | LIB '(' exp ')'                   {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | LIB '(' exp ',' exp ')'           {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | LIB '(' ')'                       {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | FUNC '(' exp ')'                  {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | FUNC '(' exp ',' exp ')'          {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
-        | FUNC '(' ')'                      {
-                                                lanzarErro(SINTAXE_NON_VALIDA);
-                                                erro = 1;
-                                                $$ = NAN;
-                                            }
 ;
 %%
 void yyerror(char *s) {
-    printf("Erro na análise sintáctica: %s\n", s);
+    lanzarErro(SINTAXE_NON_VALIDA);
 }
 
 void cambiarEcho(int valor) {

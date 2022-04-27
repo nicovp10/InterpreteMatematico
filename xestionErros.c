@@ -8,7 +8,7 @@
 void lanzarErro(int codigo) {
     switch (codigo) {
         case SINTAXE_NON_VALIDA:
-            printf(ROJO"Erro: sintaxe non válida. Escriba 'axuda()' para máis información."RESET"\n\n");
+            printf(ROJO"Erro: sintaxe non válida. Execute de novo o intérprete coa opción '-h' para máis información sobre o mesmo."RESET"\n\n");
             break;
         case FICHEIRO_NON_ATOPADO:
             printf(ROJO"Erro: non se atopou o ficheiro indicado."RESET"\n\n");
@@ -17,7 +17,7 @@ void lanzarErro(int codigo) {
             printf(ROJO"Erro: non se indicou o ficheiro necesario para a execución do comando."RESET"\n\n");
             break;
         case FICHEIRO_MAL_FORMATO:
-            printf(ROJO"Erro: ficheiro indicado con mal formato.\n\tDetalles: o ficheiro debe seguir o formato (LETRA|DIXITO)+.(LETRA|DIXITO)+."RESET"\n\n");
+            printf(ROJO"Erro: ficheiro indicado con mal formato.\n\tDetalles: o ficheiro debe ter extensión e polo menos unha letra a cada lado do punto."RESET"\n\n");
             break;
         case LIBRERIA_NON_ATOPADA:
             printf(ROJO"Erro: non se atopou a librería indicada.\n\tDetalles: comproba se antes de invocar a función importaches dita librería."RESET"\n\n");
