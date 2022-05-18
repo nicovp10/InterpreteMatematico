@@ -33,7 +33,7 @@ double axuda() {
            "\t\tCabe destacar que este intérprete está en fase beta, polo cal os erros de sintaxe non están xestionados de maneira óptima,\n"
            "\t\tfacendo que o intérprete deteña a execución en caso de que estes ocorran. Por outro lado, a sintaxe e o léxico son os que\n"
            "\t\tcabe esperar de calquera intérprete matemático.\n\n"
-           "\t\tO intérprete ten definidas dúas constantes por defecto: 'pi' e 'e'. As constantes non se poden modificar.\n\n"
+           "\t\tO intérprete ten definidas dúas constantes: 'pi' e 'e'. As constantes non se poden modificar.\n\n"
            "\t\tAs operacións permitidas por defecto son as seguintes: suma ('+'), resta ('-'), multiplicación ('*'), división ('/'),\n"
            "\t\tmódulo ('%%') e potencia ('^'). De todos modos pódense engadir máis operacións mediante a importación de librerías. Por\n"
            "\t\texemplo: para importar a librería matemática escríbese o comando 'importar libm.so.6', e para usar as súas funcións a\n"
